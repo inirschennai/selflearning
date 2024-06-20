@@ -1,1 +1,86 @@
-Test file
+// UI Script
+var CustomFilterDropdown = Class.create();
+CustomFilterDropdown.prototype = {
+    initialize: function() {
+        if (window.location.href.includes('target/incident_list.do')) {
+            this.addLoadEvent(this.modifyFilterDropdown.bind(this));
+        }
+    },
+
+    addLoadEvent: function(func) {
+        var oldonload = window.onload;
+        if (typeof window.onload != 'function') {
+            window.onload = func;
+        } else {
+            window.onload = function() {
+                if (oldonload) {
+                    oldonload();
+                }
+                func();
+            }
+        }
+    },
+
+    modifyFilterDropdown: function() {
+        // Get the filter dropdown element
+        var dropdown = document.getElementById('sys_display.incident.caller_id');
+
+        // Check if the dropdown exists
+        if (!dropdown) {
+            return;
+        }
+
+        // Loop through the dropdown options
+        for (var i = 0; i < dropdown.options.length; i++) {
+            // Get the sys_id of the current option
+            var sys_id = dropdown.options[i].value;
+
+            // Use GlideAjax to get the email of the user
+            var ga = new GlideAjax('GetUserEmail');
+            ga.addParam('sysparm_name', 'getEmail');
+            ga.addParam('sysparm_user_sys_id', sys_id);
+            ga.getXMLAnswer(this.handleAnswer.bind(this, dropdown.options[i]));
+        }
+    },
+
+    handleAnswer: function(option, answer) {
+        // Append the email to the option text
+        option.text += ' (' + answer + ')';
+    }
+};
+
+// Initialize the CustomFilterDropdown class
+new CustomFilterDropdown();
+
+var GetUserEmail = Class.create();
+GetUserEmail.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+    getEmail: function() {
+        // Get the sys_id from the request parameters
+        var userSysId = this.getParameter('sysparm_user_sys_id');
+
+        // Get the user record
+        var userGr = new GlideRecord('sys_user');
+        if (userGr.get(userSysId)) {
+            // Return the email of the user
+            return userGr.getValue('email');
+        }
+
+        // Return an empty string if the user record was not found
+        return '';
+    },
+
+    // The type property is used to avoid any warnings in the logs
+    type: 'GetUserEmail'
+});
+
+
+
+
+# Get the managed identity
+$managedIdentity = Get-AzUserAssignedIdentity -ResourceGroupName "<ResourceGroupName>" -Name "<ManagedIdentityName>"
+
+# Get the storage account
+$storageAccount = Get-AzStorageAccount -ResourceGroupName "<ResourceGroupName>" -Name "<StorageAccountName>"
+
+# Assign the "Storage Blob Data Contributor" role to the managed identity for the storage account
+New-AzRoleAssignment -ObjectId $managedIdentity.PrincipalId -RoleDefinitionName "Storage Blob Data Contributor" -Scope $storageAccount.Id
