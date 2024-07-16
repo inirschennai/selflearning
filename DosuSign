@@ -1,5 +1,3 @@
-{{Software_Requested}} for {{Requester}}
-
 {
     "emailSubject": "Please sign this document - Software Request",
     "templateId": "67738852-dd45-4b7d-957f-0b12ff3ed1ec",
@@ -12,11 +10,11 @@
             "tabs": {
                 "textTabs": [
                     {
-                        "tabLabel": "Software_Requested",
+                        "tabLabel": "{{Software_Requested}}",
                         "value": "Microsoft Visio"
                     },
                     {
-                        "tabLabel": "Requester",
+                        "tabLabel": "{{Requester}}",
                         "value": "Srini Parthasarathy"
                     }
                 ]
