@@ -1,24 +1,41 @@
 {
-    "emailSubject": "Please sign this document - Software Request",
-    "templateId": "67738852-dd45-4b7d-957f-0b12ff3ed1ec",
-    "status": "sent",
-    "templateRoles": [
-        {
-            "email": "srini.parthasarathy@outlook.com",
-            "name": "Srini Parthasarathy",
-            "roleName": "Signer1",
-            "tabs": {
-                "textTabs": [
-                    {
-                        "tabLabel": "Software Requested",
-                        "value": "Microsoft Visio"
-                    },
-                    {
-                        "tabLabel": "Requester",
-                        "value": "Srini Parthasarathy"
-                    }
-                ]
+"status": "sent",
+"emailSubject": "Software Request - Esign",
+"compositeTemplates": [
+    {
+        "serverTemplates": [
+            {
+                "sequence": "1",
+                "templateId": "21c78170-35c9-44bc-a2d3-27fced71d198"
             }
-        }
-    ]
+        ],
+        "inlineTemplates": [
+            {
+                "sequence": "2",
+                "recipients": {
+                    "signers": [
+                        {
+                            "email": "srini.parthasarathy@outlook.com",
+                            "name": "Srini Parthasarathy",
+                            "recipientId": "1",
+                            "roleName": "signer",
+                            "tabs": {
+                                "textTabs": [
+                                    {
+                                        "tabLabel": "Software Requested",
+                                        "value": "Microsoft Visio"
+                                    },
+                                    {
+                                        "tabLabel": "Requester",
+                                        "value": "Srini Parthasarathy"
+                                    }
+                                ]                                
+                            }
+                        }
+                    ]
+                }                
+            }
+        ]
+    }
+]
 }
