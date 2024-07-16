@@ -6,23 +6,19 @@
         {
             "email": "srini.parthasarathy@outlook.com",
             "name": "Srini Parthasarathy",
-            "roleName": "Signer1"
-        }
-    ],
-    "documents": [
-        {
-            "documentId": "1",
-            "name": "Software Request.docx",
-            "documentFields": [
-                {
-                    "name": "Software_Requested",
-                    "value": "Microsoft Visio"
-                },
-                {
-                    "name": "Requester",
-                    "value": "Srini Parthasarathy"
-                }
-            ]
+            "roleName": "Signer1",
+            "tabs": {
+                "textTabs": [
+                    {
+                        "tabLabel": "Software Requested",
+                        "value": "Microsoft Visio"
+                    },
+                    {
+                        "tabLabel": "Requester",
+                        "value": "Srini Parthasarathy"
+                    }
+                ]
+            }
         }
     ]
 }
