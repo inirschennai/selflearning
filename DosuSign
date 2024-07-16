@@ -36,32 +36,25 @@ https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature&cli
     var requester = params.requester;
     var approvername = params.approvername;
     var approveremail = params.approveremail;    
+    var refresh_token = params.refresh_token; // assuming refresh token is passed in params
 
-    var authUrl = 'https://account-d.docusign.com/oauth/auth';
     var tokenUrl = 'https://account-d.docusign.com/oauth/token';
     var envelopeUrl = `https://demo.docusign.net/restapi/v2.1/accounts/${account_id}/envelopes`;
-    
-    // Step 1: Use JWT
-    var jwt = sn_auth.JWT;
-    var privateKey = '-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----'; // replace with your private key
-    var jwtToken = jwt.create().setIssuer(client_id)
-    .setSubject(account_id)
-    .setAudience(authUrl)
-    .setExpiration(3600)
-    .signWithCertificate(privateKey);
 
-    // Step 2: Get access token using JWT
+    // Step 1: Get access token using refresh token
     var tokenRequest = new sn_ws.RESTMessageV2();
     tokenRequest.setHttpMethod('post');
     tokenRequest.setEndpoint(tokenUrl);
-    tokenRequest.setQueryParameter('grant_type', 'urn:ietf:params:oauth:grant-type:jwt-bearer');
-    tokenRequest.setQueryParameter('assertion', jwtToken);
+    tokenRequest.setQueryParameter('grant_type', 'refresh_token');
+    tokenRequest.setQueryParameter('refresh_token', refresh_token);
+    tokenRequest.setQueryParameter('client_id', client_id);
+    tokenRequest.setQueryParameter('client_secret', client_secret);
     var tokenResponse = tokenRequest.execute();
     var tokenResponseBody = tokenResponse.getBody();
     var tokenResponseData = JSON.parse(tokenResponseBody);
     var accessToken = tokenResponseData.access_token;
 
-    // Step 3: Call envelope endpoint
+    // Step 2: Call envelope endpoint
     var envelopeRequest = new sn_ws.RESTMessageV2();
     envelopeRequest.setHttpMethod('post');
     envelopeRequest.setEndpoint(envelopeUrl);
@@ -73,17 +66,17 @@ https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature&cli
         "templateRoles": [
             {
                 "roleName": "Approver",
-                "email": ${approveremail}
-                "name": ${approvername}
+                "email": approveremail,
+                "name": approvername,
                 "tabs": {
                     "textTabs": [
                         {
                             "tabLabel": "Software Requested",
-                            "value": ${requested_software}
+                            "value": requested_software
                         },
                         {   
                             "tabLabel": "Requester",
-                            "value": ${requester}
+                            "value": requester
                         }
                     ]   
                 }                
