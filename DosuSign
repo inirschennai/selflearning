@@ -26,7 +26,44 @@ https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature&cli
 
 https://{{hostenv}}/oauth/token
 
-using code and grant_type 
+using code and grant_type
+
+var clientId = 'your_client_id';
+var clientSecret = 'your_client_secret';
+var authCode = 'your_auth_code';
+var hostenv = 'your_host_env';
+
+// Create an instance of sn_ws.RESTMessageV2
+var restMessage = new sn_ws.RESTMessageV2();
+
+// Set the HTTP method to POST
+restMessage.setHttpMethod('post');
+
+// Set the endpoint URL
+restMessage.setEndpoint('https://' + hostenv + '/oauth/token');
+
+// Set the request body parameters
+restMessage.setRequestBody(JSON.stringify({
+    code: authCode,
+    grant_type: 'authorization_code',
+    client_id: clientId,
+    client_secret: clientSecret,
+    redirect_uri: 'your_redirect_uri'
+}));
+
+// Send the HTTP request and capture the response
+var response = restMessage.execute();
+
+// Parse the response body to JSON
+var responseBody = JSON.parse(response.getBody());
+
+// Extract the access and refresh tokens
+var accessToken = responseBody.access_token;
+var refreshToken = responseBody.refresh_token;
+
+// Log the tokens
+gs.info('Access Token: ' + accessToken);
+gs.info('Refresh Token: ' + refreshToken);
 
 
 (function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
