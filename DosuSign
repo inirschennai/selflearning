@@ -1,25 +1,27 @@
 {
     "emailSubject": "Please sign this document - Software Request",
     "templateId": "67738852-dd45-4b7d-957f-0b12ff3ed1ec",
-    "docGenFormFields": [ 
-        {
-            "name": "Software_Requested",
-            "value": "Microsoft Visio"
-        },
-        {
-            "name": "Requester",
-            "value": "Srini Parthasarathy"
-        }
-    ],
+    "status": "sent",
     "recipients": {
         "signers": [
             {
                 "email": "srini.parthasarathy@outlook.com",
                 "name": "Srini Parthasarathy",
                 "recipientId": "1",
-                "routingOrder": "1"                
+                "routingOrder": "1",
+                "tabs": {
+                    "textTabs": [
+                        {
+                            "tabLabel": "Software_Requested",
+                            "value": "Microsoft Visio"
+                        },
+                        {
+                            "tabLabel": "Requester",
+                            "value": "Srini Parthasarathy"
+                        }
+                    ]
+                }
             }
         ]
-     },
-    "status": "sent"
+    }
 }
