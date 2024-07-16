@@ -1,0 +1,31 @@
+  "emailSubject": "Please sign this document",
+  "documents": [
+    {
+      "documentId": "1",
+      "name": "Document name",
+      "transformPdfFields": true
+    }
+  ],
+  "recipients": {
+    "signers": [
+      {
+        "email": "manager@example.com",
+        "name": "Manager Name",
+        "recipientId": "1",
+        "routingOrder": "1",
+        "tabs": {
+          "textTabs": [
+            {
+              "tabLabel": "Software requested",
+              "value": variableValue // Replace with the actual value of the "Software requested" catalog variable
+            },
+            {
+              "tabLabel": "Requester",
+              "value": variableValue // Replace with the actual value of the "Requester" catalog variable
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "status": "sent"
