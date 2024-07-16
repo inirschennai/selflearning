@@ -22,6 +22,9 @@
     ]
 }
 
+https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature&client_id=d9cd1e1f-ca81-455e-b903-fdd4e8313c28&redirect_uri=https://www.example.com/callback
+
+
 (function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
 
     var params = request.pathParams;
