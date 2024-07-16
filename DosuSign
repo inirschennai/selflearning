@@ -23,6 +23,9 @@
 }
 
 (function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+    var params = request.pathParams;
+	var user_sys_id = params.user_sys_id;
     var clientId = 'your_client_id';
     var clientSecret = 'your_client_secret';
     var callbackUrl = 'your_callback_url';
