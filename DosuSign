@@ -24,14 +24,17 @@
 
 (function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
 
-    var params = request.pathParams;
-	var user_sys_id = params.user_sys_id;
-    var clientId = 'your_client_id';
-    var clientSecret = 'your_client_secret';
-    var callbackUrl = 'your_callback_url';
+	var params = request.pathParams;
+	var client_id = params.client_id;
+	var client_secret = params.client_secret;
+    var callback_url = params.callback_url;
+	var account_id = params.account_id;    
+	var requested_software = params.requested_software;
+	var requester = params.requester;
+
     var authUrl = 'https://account-d.docusign.com/oauth/auth';
     var tokenUrl = 'https://account-d.docusign.com/oauth/token';
-    var envelopeUrl = 'https://demo.docusign.net/restapi/v2/accounts/{accountId}/envelopes';
+    var envelopeUrl = 'https://demo.docusign.net/restapi/v2.1/accounts/{account_id}/envelopes';
     
     // Step 1: Get authorization code
     var authRequest = new sn_ws.RESTMessageV2();
@@ -39,8 +42,8 @@
     authRequest.setEndpoint(authUrl);
     authRequest.setQueryParameter('response_type', 'code');
     authRequest.setQueryParameter('scope', 'signature');
-    authRequest.setQueryParameter('client_id', clientId);
-    authRequest.setQueryParameter('redirect_uri', callbackUrl);
+    authRequest.setQueryParameter('client_id', client_id);
+    authRequest.setQueryParameter('redirect_uri', callback_url);
     var authResponse = authRequest.execute();
     var authResponseBody = authResponse.getBody();
     var authResponseData = JSON.parse(authResponseBody);
@@ -52,8 +55,8 @@
     tokenRequest.setEndpoint(tokenUrl);
     tokenRequest.setQueryParameter('grant_type', 'authorization_code');
     tokenRequest.setQueryParameter('code', authCode);
-    tokenRequest.setQueryParameter('client_id', clientId);
-    tokenRequest.setQueryParameter('client_secret', clientSecret);
+    tokenRequest.setQueryParameter('client_id', client_id);
+    tokenRequest.setQueryParameter('client_secret', client_secret);
     var tokenResponse = tokenRequest.execute();
     var tokenResponseBody = tokenResponse.getBody();
     var tokenResponseData = JSON.parse(tokenResponseBody);
@@ -66,7 +69,28 @@
     envelopeRequest.setEndpoint(envelopeUrl);
     envelopeRequest.setRequestHeader('Authorization', 'Bearer ' + accessToken);
     envelopeRequest.setRequestBody({
-        // Your envelope data here
+        "status": "sent",
+		"emailSubject": "Please approve Software Request via DocuSign",
+		"templateId": "21c78170-35c9-44bc-a2d3-27fced71d198",
+		"templateRoles": [
+			{
+				"roleName": "Approver",
+				"email": "srini.parthasarathy@outlook.com",
+				"name": "Srini Parthasarathy",
+				"tabs": {
+					"textTabs": [
+						{
+							"tabLabel": "Software Requested",
+							"value": "Microsoft Visio"
+						},
+						{	
+							"tabLabel": "Requester",
+							"value": "Srini Parthasarathy"
+						}
+					]   
+				}                
+			}            
+		]
     });
     var envelopeResponse = envelopeRequest.execute();
     var envelopeResponseBody = envelopeResponse.getBody();
