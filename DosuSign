@@ -32,8 +32,7 @@
     var requested_software = params.requested_software;
     var requester = params.requester;
     var approvername = params.approvername;
-    var approveremail = params.approveremail;
-    
+    var approveremail = params.approveremail;    
 
     var authUrl = 'https://account-d.docusign.com/oauth/auth';
     var tokenUrl = 'https://account-d.docusign.com/oauth/token';
