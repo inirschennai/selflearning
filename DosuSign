@@ -1,26 +1,23 @@
 {
-    "envelopeDefinition": {
-        "status": "sent",
-        "templateId": "21c78170-35c9-44bc-a2d3-27fced71d198",
-        "templateRoles": [
-            {
-                "roleName": "Approver",
-                "email": "srini.parthasarathy@outlook.com",
-                "name": "Srini Parthasarathy",
-                "tabs": {
-                    "textTabs": [
-                        {
-                            "tabLabel": "Software Requested",
-                            "value": "Microsoft Visio"
-                        },
-                        {
-                            "tabLabel": "Requester",
-                            "value": "Srini Parthasarathy"
-                        }
-                    ]   
-                }                
-            }            
-        ]
-    },
-    "envelopesCreateQP": {}
+    "status": "sent",
+    "templateId": "21c78170-35c9-44bc-a2d3-27fced71d198",
+    "templateRoles": [
+        {
+            "roleName": "Approver",
+            "email": "srini.parthasarathy@outlook.com",
+            "name": "Srini Parthasarathy",
+            "tabs": {
+                "textTabs": [
+                    {
+                        "tabLabel": "Software Requested",
+                        "value": "Microsoft Visio"
+                    },
+                    {
+                        "tabLabel": "Requester",
+                        "value": "Srini Parthasarathy"
+                    }
+                ]   
+            }                
+        }            
+    ]
 }
