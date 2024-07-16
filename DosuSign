@@ -1,6 +1,3 @@
-"errorCode": "INVALID_REQUEST_PARAMETER",
-    "message": "The request contained at least one invalid parameter. A document was defined without setting the 'name' field."
-
 {
     "emailSubject": "Please sign this document - Software Request",
     "templateId": "67738852-dd45-4b7d-957f-0b12ff3ed1ec",
@@ -15,6 +12,7 @@
     "documents": [
         {
             "documentId": "1",
+            "name": "Software Request.docx",
             "documentFields": [
                 {
                     "name": "Software_Requested",
