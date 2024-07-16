@@ -21,3 +21,57 @@
         }            
     ]
 }
+
+(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+    var clientId = 'your_client_id';
+    var clientSecret = 'your_client_secret';
+    var callbackUrl = 'your_callback_url';
+    var authUrl = 'https://account-d.docusign.com/oauth/auth';
+    var tokenUrl = 'https://account-d.docusign.com/oauth/token';
+    var envelopeUrl = 'https://demo.docusign.net/restapi/v2/accounts/{accountId}/envelopes';
+    
+    // Step 1: Get authorization code
+    var authRequest = new sn_ws.RESTMessageV2();
+    authRequest.setHttpMethod('get');
+    authRequest.setEndpoint(authUrl);
+    authRequest.setQueryParameter('response_type', 'code');
+    authRequest.setQueryParameter('scope', 'signature');
+    authRequest.setQueryParameter('client_id', clientId);
+    authRequest.setQueryParameter('redirect_uri', callbackUrl);
+    var authResponse = authRequest.execute();
+    var authResponseBody = authResponse.getBody();
+    var authResponseData = JSON.parse(authResponseBody);
+    var authCode = authResponseData.code;
+
+    // Step 2: Get access token and refresh token
+    var tokenRequest = new sn_ws.RESTMessageV2();
+    tokenRequest.setHttpMethod('post');
+    tokenRequest.setEndpoint(tokenUrl);
+    tokenRequest.setQueryParameter('grant_type', 'authorization_code');
+    tokenRequest.setQueryParameter('code', authCode);
+    tokenRequest.setQueryParameter('client_id', clientId);
+    tokenRequest.setQueryParameter('client_secret', clientSecret);
+    var tokenResponse = tokenRequest.execute();
+    var tokenResponseBody = tokenResponse.getBody();
+    var tokenResponseData = JSON.parse(tokenResponseBody);
+    var accessToken = tokenResponseData.access_token;
+    var refreshToken = tokenResponseData.refresh_token;
+
+    // Step 3: Call envelope endpoint
+    var envelopeRequest = new sn_ws.RESTMessageV2();
+    envelopeRequest.setHttpMethod('post');
+    envelopeRequest.setEndpoint(envelopeUrl);
+    envelopeRequest.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+    envelopeRequest.setRequestBody({
+        // Your envelope data here
+    });
+    var envelopeResponse = envelopeRequest.execute();
+    var envelopeResponseBody = envelopeResponse.getBody();
+    var envelopeResponseData = JSON.parse(envelopeResponseBody);
+
+    return {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        envelopeResponse: envelopeResponseData
+    };
+})(request, response);
