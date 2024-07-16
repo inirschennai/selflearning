@@ -1,2 +1,24 @@
-message": "The request contained at least one invalid parameter. 'recipients' may not be specifed when 'templateId' is set. Use 'templateRoles'."
+{
+    "emailSubject": "Please sign this document - Software Request",
+    "templateId": "67738852-dd45-4b7d-957f-0b12ff3ed1ec",
+    "status": "sent",
+    "templateRoles": [
+        {
+            "email": "srini.parthasarathy@outlook.com",
+            "name": "Srini Parthasarathy",
+            "roleName": "Signer1",
+            "tabs": {
+                "textTabs": [
+                    {
+                        "tabLabel": "Software_Requested",
+                        "value": "Microsoft Visio"
+                    },
+                    {
+                        "tabLabel": "Requester",
+                        "value": "Srini Parthasarathy"
+                    }
+                ]
+            }
+        }
+    ]
 }
