@@ -79,61 +79,73 @@ gs.info('Refresh Token: ' + refreshToken);
 
 (function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
 
-    var params = request.pathParams;
-    var client_id = params.client_id;
-    var client_secret = params.client_secret;
+	var params = request.pathParams;
+	var client_id = params.client_id;
+	var client_secret = params.client_secret;
     var callback_url = params.callback_url;
-    var account_id = params.account_id;    
-    var requested_software = params.requested_software;
-    var requester = params.requester;
-    var approvername = params.approvername;
-    var approveremail = params.approveremail;    
-    var refresh_token = params.refresh_token; // assuming refresh token is passed in params
+	var account_id = params.account_id;    
+	var requested_software = params.requested_software;
+	var requester = params.requester;
 
+    var authUrl = 'https://account-d.docusign.com/oauth/auth';
     var tokenUrl = 'https://account-d.docusign.com/oauth/token';
-    var envelopeUrl = `https://demo.docusign.net/restapi/v2.1/accounts/${account_id}/envelopes`;
+    var envelopeUrl = 'https://demo.docusign.net/restapi/v2.1/accounts/{account_id}/envelopes';
+    
+    // Step 1: Get authorization code
+    var authRequest = new sn_ws.RESTMessageV2();
+    authRequest.setHttpMethod('get');
+    authRequest.setEndpoint(authUrl);
+    authRequest.setQueryParameter('response_type', 'code');
+    authRequest.setQueryParameter('scope', 'signature');
+    authRequest.setQueryParameter('client_id', client_id);
+    authRequest.setQueryParameter('redirect_uri', callback_url);
+    var authResponse = authRequest.execute();
+    var authResponseBody = authResponse.getBody();
+    var authResponseData = JSON.parse(authResponseBody);
+    var authCode = authResponseData.code;
 
-    // Step 1: Get access token using refresh token
+    // Step 2: Get access token and refresh token
     var tokenRequest = new sn_ws.RESTMessageV2();
     tokenRequest.setHttpMethod('post');
     tokenRequest.setEndpoint(tokenUrl);
-    tokenRequest.setQueryParameter('grant_type', 'refresh_token');
-    tokenRequest.setQueryParameter('refresh_token', refresh_token);
+    tokenRequest.setQueryParameter('grant_type', 'authorization_code');
+    tokenRequest.setQueryParameter('code', authCode);
     tokenRequest.setQueryParameter('client_id', client_id);
     tokenRequest.setQueryParameter('client_secret', client_secret);
     var tokenResponse = tokenRequest.execute();
     var tokenResponseBody = tokenResponse.getBody();
     var tokenResponseData = JSON.parse(tokenResponseBody);
     var accessToken = tokenResponseData.access_token;
+    var refreshToken = tokenResponseData.refresh_token;
 
-    // Step 2: Call envelope endpoint
+    // Step 3: Call envelope endpoint
     var envelopeRequest = new sn_ws.RESTMessageV2();
     envelopeRequest.setHttpMethod('post');
     envelopeRequest.setEndpoint(envelopeUrl);
     envelopeRequest.setRequestHeader('Authorization', 'Bearer ' + accessToken);
     envelopeRequest.setRequestBody({
         "status": "sent",
-        "emailSubject": "Please approve Software Request via DocuSign",
-        "templateId": "21c78170-35c9-44bc-a2d3-27fced71d198",
-        "templateRoles": [
-            {
-                "roleName": "Approver",
-                "email": approveremail,
-                "name": approvername,
-                "tabs": {
-                    "textTabs": [
-                        {
-                            "tabLabel": "Software Requested",
-                            "value": requested_software
-                        },
-                        {   
-                            "tabLabel": "Requester",
-                            "value": requester
-                        }
-                    ]   
-                }                
-            }            
-        ]
+		"emailSubject": "Please approve Software Request via DocuSign",
+		"templateId": "21c78170-35c9-44bc-a2d3-27fced71d198",
+		"templateRoles": [
+			{
+				"roleName": "Approver",
+				"email": "srini.parthasarathy@outlook.com",
+				"name": "Srini Parthasarathy",
+				"tabs": {
+					"textTabs": [
+						{
+							"tabLabel": "Software Requested",
+							"value": "Microsoft Visio"
+						},
+						{	
+							"tabLabel": "Requester",
+							"value": "Srini Parthasarathy"
+						}
+					]   
+				}                
+			}            
+		]
     });
     var envelopeResponse = envelopeRequest.execute();
     var envelopeResponseBody = envelopeResponse.getBody();
@@ -141,6 +153,7 @@ gs.info('Refresh Token: ' + refreshToken);
 
     return {
         accessToken: accessToken,
+        refreshToken: refreshToken,
         envelopeResponse: envelopeResponseData
     };
 })(request, response);
