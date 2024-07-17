@@ -143,7 +143,7 @@ gs.info('Refresh Token: ' + refreshToken);
         refreshToken: refreshToken,
         envelopeResponse: envelopeResponseData
     };
-})(request, response
+})(request, response);
 
 (function() {
     var client_id = 'your_client_id';
