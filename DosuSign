@@ -82,12 +82,12 @@ https://dev269009.service-now.com/api/1467923/docusign_e_signature/
     var restMessage = new sn_ws.RESTMessageV2();
     restMessage.setHttpMethod('POST');
     var endpoint = 'https://dev269009.service-now.com/api/1467923/docusign_e_signature/' + 
-        inputs.client_id + '/' + 
-        inputs.client_secret + '/' + 
-        inputs.account_id + '/' + 
-        inputs.requested_software + '/' + 
-        inputs.requester + '/' + 
-        inputs.refresh_token;
+        encodeURIComponent(inputs.client_id) + '/' + 
+        encodeURIComponent(inputs.client_secret) + '/' + 
+        encodeURIComponent(inputs.account_id) + '/' + 
+        encodeURIComponent(inputs.requested_software) + '/' + 
+        encodeURIComponent(inputs.requester) + '/' + 
+        encodeURIComponent(inputs.refresh_token);
     restMessage.setEndpoint(endpoint);
     var response = restMessage.execute();
     var responseBody = response.getBody();
