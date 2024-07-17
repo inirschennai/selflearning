@@ -27,8 +27,12 @@ https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature&cli
 Integration key: 13deda28-95e4-4c7b-8303-68cb3e4a24f0
 Secret Key: 12444f79-7406-4feb-83e5-0a6c97e84abd
 
+MTNkZWRhMjgtOTVlNC00YzdiLTgzMDMtNjhjYjNlNGEyNGYwOjEyNDQ0Zjc5LTc0MDYtNGZlYi04M2U1LTBhNmM5N2U4NGFiZA==
+
 Integration key: d9cd1e1f-ca81-455e-b903-fdd4e8313c28
 Secret Key: 9317fe9b-758a-4281-bd22-569245c5747e
+
+ZDljZDFlMWYtY2E4MS00NTVlLWI5MDMtZmRkNGU4MzEzYzI4OjkzMTdmZTliLTc1OGEtNDI4MS1iZDIyLTU2OTI0NWM1NzQ3ZQ==
 
 
 https://{{hostenv}}/oauth/token
