@@ -45,6 +45,33 @@ restMessage.setRequestHeader('Content-Type', 'application/pdf');
 restMessage.setRequestBody(pdf);
 var response = restMessage.execute();
 
+// Function to check the status of a DocuSign envelope
+function checkEnvelopeStatus(accountId, envelopeId, docusignAccessToken) {
+    var restMessage = new sn_ws.RESTMessageV2();
+    restMessage.setHttpMethod('GET');
+    restMessage.setEndpoint('https://demo.docusign.net/restapi/v2.1/accounts/' + accountId + '/envelopes/' + envelopeId);
+    restMessage.setRequestHeader('Authorization', 'Bearer ' + docusignAccessToken);
+    var response = restMessage.execute();
+    var responseBody = JSON.parse(response.getBody());
+    var status = responseBody.status;
+    return status;
+}
+
+// Function to call when the envelope is completed
+function onEnvelopeCompleted(envelopeId) {
+    // Add your code here to handle when the envelope is completed
+    gs.info('Envelope ' + envelopeId + ' has been completed');
+}
+
+// Example usage
+var accountId = 'your_account_id';
+var envelopeId = 'your_envelope_id';
+var docusignAccessToken = 'your_docusign_access_token';
+var status = checkEnvelopeStatus(accountId, envelopeId, docusignAccessToken);
+if (status === 'completed') {
+    onEnvelopeCompleted(envelopeId);
+}
+
 https://dev269009.service-now.com/api/1467923/docusign_e_signature/
 
 /api/1467923/docusign_e_signature/{client_id}/{client_secret}/{account_id}/{requested_software}/{requester}/{refresh_token}
