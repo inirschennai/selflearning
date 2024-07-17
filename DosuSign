@@ -22,6 +22,9 @@
     ]
 }
 
+var instanceName = gs.getProperty('instance_name');
+gs.info(instanceName);
+
 https://dev269009.service-now.com/api/1467923/docusign_e_signature/
 
 /api/1467923/docusign_e_signature/{client_id}/{client_secret}/{account_id}/{requested_software}/{requester}/{refresh_token}
