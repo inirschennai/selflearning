@@ -82,7 +82,6 @@ gs.info('Refresh Token: ' + refreshToken);
     var params = request.pathParams;
     var client_id = params.client_id;
     var client_secret = params.client_secret;
-    var callback_url = params.callback_url;
     var account_id = params.account_id;    
     var requested_software = params.requested_software;
     var requester = params.requester;
@@ -146,13 +145,12 @@ gs.info('Refresh Token: ' + refreshToken);
 })(request, response);
 
 (function() {
-    var client_id = 'your_client_id';
-    var client_secret = 'your_client_secret';
-    var callback_url = 'your_callback_url';
-    var account_id = 'your_account_id';    
-    var requested_software = 'your_requested_software';
-    var requester = 'your_requester';
-    var refresh_token = 'your_refresh_token';  // Assuming the refresh token is passed as a parameter
+    var client_id = '13deda28-95e4-4c7b-8303-68cb3e4a24f0';
+    var client_secret = '12444f79-7406-4feb-83e5-0a6c97e84abd';
+    var account_id = 'c9fb8dec-73fa-49b8-af23-06762ff10fd4';    
+    var requested_software = 'Microsoft Visio';
+    var requester = 'Srini Parthasarathy';
+    var refresh_token = 'eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQoAAAABAAgABwAAIUS_d6bcSAgAAKGotwq-3EgCAPBFnxJENkdMudscvAtO_DcVAAEAAAAYAAEAAAAFAAAADQAkAAAAMTNkZWRhMjgtOTVlNC00YzdiLTgzMDMtNjhjYjNlNGEyNGYwIgAkAAAAMTNkZWRhMjgtOTVlNC00YzdiLTgzMDMtNjhjYjNlNGEyNGYwMAAA-l1kdqbcSDcAGmwPV9OKvkSnXLwbyC6tzQ.Hgs7kKc8EtnLsE9zaFvg-CyCe2KmBvb0eRD2HQqh8Xkh2jfHsoZxbTBhXKyGlBNSJPo1EHO35zn-Ll3Ysi6HAfV3B64tlOY0yv3ihKU4qR_f82SBlhyXWHz-6EJ70MdG59Upx3V-YYQePYsiFigi_STudbXTUN6PYhxTfUEJ8-KvGCqYDufTs2gdAE0s6SPmzQFxga18F33nKRsxdDW2tlBX9j5O4gB8UOawWNOK4Rb5nGv9gsws3p05LXSwQabhs1P0Pl6ZmBCr7Mur8IJFyYlzuxUFARrNG4NjMUaIlLcuwSLNFBdiES9es8U_NRnsw_OA5iWTwDwrFmjOhTwgsg';  // Assuming the refresh token is passed as a parameter
 
     var tokenUrl = 'https://account-d.docusign.com/oauth/token';
     var envelopeUrl = 'https://demo.docusign.net/restapi/v2.1/accounts/' + account_id + '/envelopes';
@@ -170,6 +168,8 @@ gs.info('Refresh Token: ' + refreshToken);
     var tokenResponseData = JSON.parse(tokenResponseBody);
     var accessToken = tokenResponseData.access_token;
     var refreshToken = tokenResponseData.refresh_token;
+	gs.info('Access Token: ' + accessToken);
+    gs.info('Refresh Token: ' + refreshToken);    
 
     // Step 2: Call envelope endpoint
     var envelopeRequest = new sn_ws.RESTMessageV2();
@@ -204,7 +204,5 @@ gs.info('Refresh Token: ' + refreshToken);
     var envelopeResponseBody = envelopeResponse.getBody();
     var envelopeResponseData = JSON.parse(envelopeResponseBody);
 
-    gs.info('Access Token: ' + accessToken);
-    gs.info('Refresh Token: ' + refreshToken);
     gs.info('Envelope Response: ' + JSON.stringify(envelopeResponseData));
 })();
