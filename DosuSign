@@ -25,6 +25,26 @@
 var instanceName = gs.getProperty('instance_name');
 gs.info(instanceName);
 
+var envelopeId = responseBody.envelopeId;
+
+
+/ Step 2: Retrieve the completed envelope from DocuSign
+var restMessage = new sn_ws.RESTMessageV2();
+restMessage.setHttpMethod('GET');
+restMessage.setEndpoint('https://demo.docusign.net/restapi/v2.1/accounts/{accountId}/envelopes/' + envelopeId + '/documents/combined');
+restMessage.setRequestHeader('Authorization', 'Bearer ' + your_docusign_access_token);
+var response = restMessage.execute();
+var responseBody = response.getBody();
+var pdf = new GlideSysAttachment().writeBase64('incident', incident_sys_id, '', 'application/pdf', 'document.pdf', responseBody);
+
+// Step 3: Upload the PDF to ServiceNow
+var restMessage = new sn_ws.RESTMessageV2();
+restMessage.setHttpMethod('POST');
+restMessage.setEndpoint('https://your-instance.service-now.com/api/now/attachment/file');
+restMessage.setRequestHeader('Content-Type', 'application/pdf');
+restMessage.setRequestBody(pdf);
+var response = restMessage.execute();
+
 https://dev269009.service-now.com/api/1467923/docusign_e_signature/
 
 /api/1467923/docusign_e_signature/{client_id}/{client_secret}/{account_id}/{requested_software}/{requester}/{refresh_token}
