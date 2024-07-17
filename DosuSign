@@ -89,7 +89,7 @@ gs.info('Refresh Token: ' + refreshToken);
     var refresh_token = params.refresh_token;  // Assuming the refresh token is passed as a parameter
 
     var tokenUrl = 'https://account-d.docusign.com/oauth/token';
-    var envelopeUrl = 'https://demo.docusign.net/restapi/v2.1/accounts/${account_id}/envelopes';
+    var envelopeUrl = 'https://demo.docusign.net/restapi/v2.1/accounts/' + account_id + '/envelopes';
     
     // Step 1: Get access token using refresh token
     var tokenRequest = new sn_ws.RESTMessageV2();
@@ -143,4 +143,68 @@ gs.info('Refresh Token: ' + refreshToken);
         refreshToken: refreshToken,
         envelopeResponse: envelopeResponseData
     };
-})(request, response);
+})(request, response
+
+(function() {
+    var client_id = 'your_client_id';
+    var client_secret = 'your_client_secret';
+    var callback_url = 'your_callback_url';
+    var account_id = 'your_account_id';    
+    var requested_software = 'your_requested_software';
+    var requester = 'your_requester';
+    var refresh_token = 'your_refresh_token';  // Assuming the refresh token is passed as a parameter
+
+    var tokenUrl = 'https://account-d.docusign.com/oauth/token';
+    var envelopeUrl = 'https://demo.docusign.net/restapi/v2.1/accounts/' + account_id + '/envelopes';
+    
+    // Step 1: Get access token using refresh token
+    var tokenRequest = new sn_ws.RESTMessageV2();
+    tokenRequest.setHttpMethod('post');
+    tokenRequest.setEndpoint(tokenUrl);
+    tokenRequest.setQueryParameter('grant_type', 'refresh_token');
+    tokenRequest.setQueryParameter('refresh_token', refresh_token);
+    tokenRequest.setQueryParameter('client_id', client_id);
+    tokenRequest.setQueryParameter('client_secret', client_secret);
+    var tokenResponse = tokenRequest.execute();
+    var tokenResponseBody = tokenResponse.getBody();
+    var tokenResponseData = JSON.parse(tokenResponseBody);
+    var accessToken = tokenResponseData.access_token;
+    var refreshToken = tokenResponseData.refresh_token;
+
+    // Step 2: Call envelope endpoint
+    var envelopeRequest = new sn_ws.RESTMessageV2();
+    envelopeRequest.setHttpMethod('post');
+    envelopeRequest.setEndpoint(envelopeUrl);
+    envelopeRequest.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+    envelopeRequest.setRequestBody(JSON.stringify({
+        "status": "sent",
+        "emailSubject": "Please approve Software Request via DocuSign",
+        "templateId": "21c78170-35c9-44bc-a2d3-27fced71d198",
+        "templateRoles": [
+            {
+                "roleName": "Approver",
+                "email": "srini.parthasarathy@outlook.com",
+                "name": "Srini Parthasarathy",
+                "tabs": {
+                    "textTabs": [
+                        {
+                            "tabLabel": "Software Requested",
+                            "value": requested_software
+                        },
+                        {   
+                            "tabLabel": "Requester",
+                            "value": requester
+                        }
+                    ]   
+                }                
+            }            
+        ]
+    }));
+    var envelopeResponse = envelopeRequest.execute();
+    var envelopeResponseBody = envelopeResponse.getBody();
+    var envelopeResponseData = JSON.parse(envelopeResponseBody);
+
+    gs.info('Access Token: ' + accessToken);
+    gs.info('Refresh Token: ' + refreshToken);
+    gs.info('Envelope Response: ' + JSON.stringify(envelopeResponseData));
+})();
