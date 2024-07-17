@@ -22,11 +22,7 @@
     ]
 }
 
-var instanceName = gs.getProperty('instance_name');
-gs.info(instanceName);
-
 var envelopeId = responseBody.envelopeId;
-
 
 / Step 2: Retrieve the completed envelope from DocuSign
 var restMessage = new sn_ws.RESTMessageV2();
