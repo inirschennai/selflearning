@@ -22,6 +22,26 @@
     ]
 }
 
+(function execute(inputs, outputs) {
+    var restMessage = new sn_ws.RESTMessageV2();
+    restMessage.setHttpMethod(inputs.method); // Assuming you have an input named "method"
+    restMessage.setEndpoint(inputs.url); // Assuming you have an input named "url"
+    restMessage.setRequestHeader('Content-Type', 'application/json');
+    if (inputs.headers) { // Assuming you have an input named "headers" which is a JSON object of key-value pairs
+        for (var header in inputs.headers) {
+            restMessage.setRequestHeader(header, inputs.headers[header]);
+        }
+    }
+    if (inputs.body) { // Assuming you have an input named "body"
+        restMessage.setRequestBody(JSON.stringify(inputs.body));
+    }
+    var response = restMessage.execute();
+    var responseBody = response.getBody();
+    var httpStatus = response.getStatusCode();
+    outputs.responseBody = JSON.parse(responseBody); // Assuming you have an output named "responseBody"
+    outputs.httpStatus = httpStatus; // Assuming you have an output named "httpStatus"
+})(inputs, outputs);
+
 https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature&client_id=d9cd1e1f-ca81-455e-b903-fdd4e8313c28&redirect_uri=https://www.example.com/callback
 
 Integration key: 13deda28-95e4-4c7b-8303-68cb3e4a24f0
