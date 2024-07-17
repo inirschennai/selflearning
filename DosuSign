@@ -24,6 +24,10 @@
 
 var envelopeId = responseBody.envelopeId;
 
+gs.info(JSON.stringify(responseBody.envelopeResponse));
+var envelopeId = responseBody.envelopeResponse.result.envelopeId;
+var envelopeId = responseBody.envelopeResponse.envelopeId;
+
 / Step 2: Retrieve the completed envelope from DocuSign
 var restMessage = new sn_ws.RESTMessageV2();
 restMessage.setHttpMethod('GET');
