@@ -28,17 +28,15 @@ https://dev269009.service-now.com/api/1467923/docusign_e_signature/
 
 (function execute(inputs, outputs) {
     var restMessage = new sn_ws.RESTMessageV2();
-    restMessage.setHttpMethod(inputs.method); // Assuming you have an input named "method"
-    restMessage.setEndpoint(inputs.url); // Assuming you have an input named "url"
-    restMessage.setRequestHeader('Content-Type', 'application/json');
-    if (inputs.headers) { // Assuming you have an input named "headers" which is a JSON object of key-value pairs
-        for (var header in inputs.headers) {
-            restMessage.setRequestHeader(header, inputs.headers[header]);
-        }
-    }
-    if (inputs.body) { // Assuming you have an input named "body"
-        restMessage.setRequestBody(JSON.stringify(inputs.body));
-    }
+    restMessage.setHttpMethod('POST');
+    var endpoint = 'https://dev269009.service-now.com/api/1467923/docusign_e_signature/' + 
+        inputs.client_id + '/' + 
+        inputs.client_secret + '/' + 
+        inputs.account_id + '/' + 
+        inputs.requested_software + '/' + 
+        inputs.requester + '/' + 
+        inputs.refresh_token;
+    restMessage.setEndpoint(endpoint);
     var response = restMessage.execute();
     var responseBody = response.getBody();
     var httpStatus = response.getStatusCode();
