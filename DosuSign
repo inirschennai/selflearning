@@ -101,9 +101,9 @@ var envelopeId = responseBody.envelopeResponse.envelopeId;
 
 
 	var responseStream = response.getResponseStream();
-    	var DecodedBytes = GlideStringUtil.streamToBytes(responseStream);
     	var attach = new GlideSysAttachment();
-    	attach.write(ritmrec, 'DocuSign_Software_Request_signed_form.pdf', 'application/pdf', DecodedBytes);
+    	attach.writeContentStream(ritmrec, 'DocuSign_Software_Request_signed_form.pdf', 'application/pdf', responseStream);
+
 })(inputs, outputs);
 
 Error: Can't find method com.glide.ui.SysAttachment.write(java.lang.String,string,string,[B). (Process Automation.d7c8acac83af4210f6121665eeaad3d7; line 27)
