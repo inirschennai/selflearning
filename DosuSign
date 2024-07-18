@@ -22,6 +22,16 @@
     ]
 }
 
+var request = new sn_ws.RESTMessageV2();
+request.setHttpMethod('get');
+request.setEndpoint('https://api.docusign.net/restapi/v2.1/accounts/{accountId}/envelopes/{envelopeId}');
+request.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+var response = request.execute();
+var responseBody = response.getBody();
+var parsedResponse = JSON.parse(responseBody);
+var status = parsedResponse.status;
+return status;
+
 var response = restMessage.execute();
 var responseBody = response.getBody();
 var parsedResponse = JSON.parse(responseBody);
