@@ -83,23 +83,30 @@ https://dev269009.service-now.com/api/1467923/docusign_e_signature/
 /api/1467923/docusign_e_signature/{client_id}/{client_secret}/{account_id}/{requested_software}/{requester}/{refresh_token}
 
 (function execute(inputs, outputs) {
+    var instanceName = gs.getProperty('instance_name');
+    gs.info("Instance name: " + instanceName);
     var restMessage = new sn_ws.RESTMessageV2();
     restMessage.setHttpMethod('POST');
-    var endpoint = 'https://dev269009.service-now.com/api/1467923/docusign_e_signature/' + 
-        encodeURIComponent(inputs.client_id) + '/' + 
-        encodeURIComponent(inputs.client_secret) + '/' + 
-        encodeURIComponent(inputs.account_id) + '/' + 
+    var endpoint = 'https://' + instanceName + '.service-now.com/api/1467923/docusign_e_signature/' + 
+        inputs.client_id + '/' + 
+        inputs.client_secret + '/' + 
+        inputs.account_id + '/' + 
         encodeURIComponent(inputs.requested_software) + '/' + 
         encodeURIComponent(inputs.requester) + '/' + 
-        encodeURIComponent(inputs.refresh_token);
+        inputs.refresh_token  + '/' + 
+        encodeURIComponent(inputs.approver_name)  + '/' +
+        encodeURIComponent(inputs.approver_email);
+    gs.info("EndPoint: " + endpoint);
     restMessage.setEndpoint(endpoint);
     var response = restMessage.execute();
     var responseBody = response.getBody();
-    var httpStatus = response.getStatusCode();
-    outputs.responseBody = JSON.parse(responseBody); // Assuming you have an output named "responseBody"
-    outputs.httpStatus = httpStatus; // Assuming you have an output named "httpStatus"
-})(inputs, outputs);
+    gs.info("Response from DocuSign: " + JSON.stringify(responseBody));
+    gs.info("Access Token: " + responseBody.accessToken);
+    gs.info("Refresh Token: " + responseBody.refreshToken);
+    gs.info("Rest: " + JSON.stringify(responseBody.result.envelopeResponse));
 
+    
+})(inputs, outputs);
 https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature&client_id=d9cd1e1f-ca81-455e-b903-fdd4e8313c28&redirect_uri=https://www.example.com/callback
 
 Integration key: 13deda28-95e4-4c7b-8303-68cb3e4a24f0
