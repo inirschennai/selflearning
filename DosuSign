@@ -71,23 +71,10 @@ var envelopeId = responseBody.envelopeResponse.envelopeId;
     var response = restMessage.execute();
     var statusCode = response.getStatusCode();
     gs.info('DocuSign Status code: ' + statusCode);
-    var pdf = new GlideSysAttachment().writeBase64('sc_req_item', ritm, '', 'application/pdf', 'Software Request_DocuSign_signed_document.pdf', responseBody);
-
-    // Step 2: Upload the PDF to ServiceNow
-    var endpoint = 'https://' + instanceName + '.service-now.com/api/now/attachment/file';
-    gs.info('SNow Document upload endpoint: ' + endpoint);
-    var restMessage = new sn_ws.RESTMessageV2();
-    restMessage.setBasicAuth(username, password);
-    restMessage.setHttpMethod('POST');
-    restMessage.setEndpoint(endpoint);
-    restMessage.setRequestHeader('Content-Type', 'application/pdf');
-    restMessage.setRequestBody(pdf);
-    var response = restMessage.execute();
-    var snowstatusCode = response.getStatusCode();
-    gs.info('SNow Status code: ' + snowstatusCode);
     var responseBody = response.getBody();
-    var parsedResponse = JSON.parse(responseBody);
-    gs.info('Uploaded file sys_id: ' + parsedResponse.result.sys_id);
+    var responseBodyBase64 = GlideStringUtil.base64Encode(responseBody);
+    var pdf = new GlideSysAttachment().writeBase64('sc_req_item', ritm, '', 'application/pdf', 'Software Request_DocuSign_signed_document.pdf', responseBodyBase64);    
+    gs.info('Attachment sys_id: ' + pdf);
 })(inputs, outputs);
 
 
