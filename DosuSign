@@ -51,22 +51,40 @@ gs.info(JSON.stringify(responseBody.envelopeResponse));
 var envelopeId = responseBody.envelopeResponse.result.envelopeId;
 var envelopeId = responseBody.envelopeResponse.envelopeId;
 
-/ Step 2: Retrieve the completed envelope from DocuSign
-var restMessage = new sn_ws.RESTMessageV2();
-restMessage.setHttpMethod('GET');
-restMessage.setEndpoint('https://demo.docusign.net/restapi/v2.1/accounts/{accountId}/envelopes/' + envelopeId + '/documents/combined');
-restMessage.setRequestHeader('Authorization', 'Bearer ' + your_docusign_access_token);
-var response = restMessage.execute();
-var responseBody = response.getBody();
-var pdf = new GlideSysAttachment().writeBase64('incident', incident_sys_id, '', 'application/pdf', 'document.pdf', responseBody);
+(function execute(inputs, outputs) {
+// ... code ...
 
-// Step 3: Upload the PDF to ServiceNow
-var restMessage = new sn_ws.RESTMessageV2();
-restMessage.setHttpMethod('POST');
-restMessage.setEndpoint('https://your-instance.service-now.com/api/now/attachment/file');
-restMessage.setRequestHeader('Content-Type', 'application/pdf');
-restMessage.setRequestBody(pdf);
-var response = restMessage.execute();
+    var instanceName = gs.getProperty('instance_name');
+    gs.info("Instance name: " + instanceName);
+    
+    var ritm = inputs.ritm.sys_id;
+    gs.info("RITM sysid: " + ritm);
+    
+    // Step 1: Retrieve the completed envelope from DocuSign
+
+    var envelopeURL = 'https://demo.docusign.net/restapi/v2.1/accounts/' + inputs.account_id + '/envelopes/' + inputs.envelope_id  + '/documents/combined';
+    gs.info('Envelope Document endpoint: ' + envelopeURL);
+    var restMessage = new sn_ws.RESTMessageV2();
+    restMessage.setHttpMethod('GET');
+    restMessage.setEndpoint(envelopeURL);
+    restMessage.setRequestHeader('Authorization', 'Bearer ' + inputs.access_token);
+    var response = restMessage.execute();
+    var responseBody = response.getBody();
+    var parsedResponse = JSON.parse(responseBody);
+    gs.info('Response from DocuSign: ' + JSON.stringify(parsedResponse));
+    var pdf = new GlideSysAttachment().writeBase64('sc_req_item', ritm, '', 'application/pdf', 'Software Request_DocuSign_signed_document.pdf', responseBody);
+
+    // Step 2: Upload the PDF to ServiceNow
+    var endpoint = 'https://' + instanceName + '.service-now.com/api/now/attachment/file';
+    gs.info('SNow Document upload endpoint: ' + endpoint);
+    var restMessage = new sn_ws.RESTMessageV2();
+    restMessage.setHttpMethod('POST');
+    restMessage.setEndpoint(endpoint);
+    restMessage.setRequestHeader('Content-Type', 'application/pdf');
+    restMessage.setRequestBody(pdf);
+    var response = restMessage.execute();
+})(inputs, outputs);
+
 
 // Function to check the status of a DocuSign envelope
 function checkEnvelopeStatus(accountId, envelopeId, docusignAccessToken) {
