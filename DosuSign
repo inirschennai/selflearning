@@ -1,6 +1,14 @@
 var ritm = new GlideRecord('sc_req_item');
 ritm.get('aec79906eb43011008f2951ff15228f0');
 
+(function execute(inputs, outputs) {
+  var regex = /(RITM\d+)/;
+  var match = inputs.text.match(regex);
+  if (match) {
+    outputs.ritmNumber = match[1];
+  }
+})({text: 'Please approve Software Request via DocuSign for RITM0000005'}, {});
+
 //var ritmsysid = 'aec79906eb43011008f2951ff15228f0';
 var testBase64 = GlideStringUtil.base64Encode('test');
 //var testPdf = new GlideSysAttachment().writeBase64('sc_req_item', ritmsysid, '', 'application/pdf', 'test.pdf', testBase64);
