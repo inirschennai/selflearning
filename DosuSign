@@ -86,7 +86,9 @@ var envelopeId = responseBody.envelopeResponse.envelopeId;
     var ritm = inputs.ritm.sys_id;
     gs.info("RITM sysid: " + ritm);
     
-	var envelopeURL = 'https://demo.docusign.net/restapi/v2.1/accounts/' + inputs.account_id + '/envelopes/' + inputs.envelope_id  + '/documents/combined';
+    //Retrieve the completed envelope from DocuSign and create attachment in ServiceNow
+
+    var envelopeURL = 'https://demo.docusign.net/restapi/v2.1/accounts/' + inputs.account_id + '/envelopes/' + inputs.envelope_id  + '/documents/combined';
 	gs.info('Envelope Document endpoint: ' + envelopeURL);
 	var restMessage = new sn_ws.RESTMessageV2();
 	restMessage.setHttpMethod('GET');
@@ -98,11 +100,12 @@ var envelopeId = responseBody.envelopeResponse.envelopeId;
 	var responseBody = response.getBody();
 	var responseBodyBase64 = GlideStringUtil.base64Encode(responseBody);
 	gs.info('Base64-encoded PDF data: ' + responseBodyBase64);
-	var pdf = new GlideSysAttachment().writeBase64('sc_req_item', ritm, '', 'application/pdf', 'Software Request_DocuSign_signed_document.pdf', responseBodyBase64);    
-	gs.info('Attachment sys_id: ' + pdf);
+	
+	var DecodedBytes = GlideStringUtil.base64DecodeAsBytes(responseBodyBase64);
+	var attach = new GlideSysAttachment();
+	attach.write(ritm, 'DocuSign_Software_Request_signed_form.pdf', 'application/pdf', DecodedBytes);
 
 })(inputs, outputs);
-
 
 // Function to check the status of a DocuSign envelope
 function checkEnvelopeStatus(accountId, envelopeId, docusignAccessToken) {
