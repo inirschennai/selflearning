@@ -9,7 +9,7 @@ Please approve Software Request via DocuSign for RITM0000005
 // ... code ...
 
     var text = inputs.text;
-    var pattern = inputs.pattern;
+    var pattern = new RegExp(inputs.pattern);
     gs.info('Pattern: ' + pattern);
 
     var match = text.match(pattern);
