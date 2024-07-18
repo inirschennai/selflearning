@@ -1,5 +1,27 @@
+
 var ritm = new GlideRecord('sc_req_item');
 ritm.get('aec79906eb43011008f2951ff15228f0');
+
+Please approve Software Request via DocuSign for RITM0000005
+/(RITM\d+)/
+
+(function execute(inputs, outputs) {
+// ... code ...
+
+    var text = inputs.text;
+    var pattern = inputs.pattern;
+    gs.info('Pattern: ' + pattern);
+
+    var match = text.match(pattern);
+    gs.info("Match?: " + match)
+
+    if (match)
+    {
+        outputs.ritm = match[1];
+    }
+
+})(inputs, outputs);
+
 
 (function execute(inputs, outputs) {
   var regex = /(RITM\d+)/;
