@@ -69,9 +69,8 @@ var envelopeId = responseBody.envelopeResponse.envelopeId;
     restMessage.setEndpoint(envelopeURL);
     restMessage.setRequestHeader('Authorization', 'Bearer ' + inputs.access_token);
     var response = restMessage.execute();
-    var responseBody = response.getBody();
-    var parsedResponse = JSON.parse(responseBody);
-    gs.info('Response from DocuSign: ' + JSON.stringify(parsedResponse));
+    var statusCode = response.getStatusCode();
+    gs.info('DocuSign Status code: ' + statusCode);
     var pdf = new GlideSysAttachment().writeBase64('sc_req_item', ritm, '', 'application/pdf', 'Software Request_DocuSign_signed_document.pdf', responseBody);
 
     // Step 2: Upload the PDF to ServiceNow
@@ -83,6 +82,11 @@ var envelopeId = responseBody.envelopeResponse.envelopeId;
     restMessage.setRequestHeader('Content-Type', 'application/pdf');
     restMessage.setRequestBody(pdf);
     var response = restMessage.execute();
+    var snowstatusCode = response.getStatusCode();
+    gs.info('SNow Status code: ' + snowstatusCode);
+    var responseBody = response.getBody();
+    var parsedResponse = JSON.parse(responseBody);
+    gs.info('Uploaded file sys_id: ' + parsedResponse.result.sys_id);
 })(inputs, outputs);
 
 
