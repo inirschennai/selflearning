@@ -83,8 +83,9 @@ var envelopeId = responseBody.envelopeResponse.envelopeId;
     var instanceName = gs.getProperty('instance_name');
     gs.info("Instance name: " + instanceName);
     
-    var ritm = inputs.ritm.sys_id;
-    gs.info("RITM sysid: " + ritm);
+    var ritmrec = new GlideRecord('sc_req_item');
+	ritmrec.get(inputs.ritm.sys_id);
+	gs.info("RITM sysid: " + ritmrec.sys_id);
     
     //Retrieve the completed envelope from DocuSign and create attachment in ServiceNow
 
@@ -103,9 +104,11 @@ var envelopeId = responseBody.envelopeResponse.envelopeId;
 	
 	var DecodedBytes = GlideStringUtil.base64DecodeAsBytes(responseBodyBase64);
 	var attach = new GlideSysAttachment();
-	attach.write(ritm, 'DocuSign_Software_Request_signed_form.pdf', 'application/pdf', DecodedBytes);
+	attach.write(ritmrec, 'DocuSign_Software_Request_signed_form.pdf', 'application/pdf', DecodedBytes);
 
 })(inputs, outputs);
+
+Error: Can't find method com.glide.ui.SysAttachment.write(java.lang.String,string,string,[B). (Process Automation.d7c8acac83af4210f6121665eeaad3d7; line 27)
 
 // Function to check the status of a DocuSign envelope
 function checkEnvelopeStatus(accountId, envelopeId, docusignAccessToken) {
