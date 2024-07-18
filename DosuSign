@@ -60,21 +60,21 @@ var envelopeId = responseBody.envelopeResponse.envelopeId;
     var ritm = inputs.ritm.sys_id;
     gs.info("RITM sysid: " + ritm);
     
-    // Step 1: Retrieve the completed envelope from DocuSign
+	var envelopeURL = 'https://demo.docusign.net/restapi/v2.1/accounts/' + inputs.account_id + '/envelopes/' + inputs.envelope_id  + '/documents/combined';
+	gs.info('Envelope Document endpoint: ' + envelopeURL);
+	var restMessage = new sn_ws.RESTMessageV2();
+	restMessage.setHttpMethod('GET');
+	restMessage.setEndpoint(envelopeURL);
+	restMessage.setRequestHeader('Authorization', 'Bearer ' + inputs.access_token);
+	var response = restMessage.execute();
+	var statusCode = response.getStatusCode();
+	gs.info('DocuSign Status code: ' + statusCode);
+	var responseBody = response.getBody();
+	var responseBodyBase64 = GlideStringUtil.base64Encode(responseBody);
+	gs.info('Base64-encoded PDF data: ' + responseBodyBase64);
+	var pdf = new GlideSysAttachment().writeBase64('sc_req_item', ritm, '', 'application/pdf', 'Software Request_DocuSign_signed_document.pdf', responseBodyBase64);    
+	gs.info('Attachment sys_id: ' + pdf);
 
-    var envelopeURL = 'https://demo.docusign.net/restapi/v2.1/accounts/' + inputs.account_id + '/envelopes/' + inputs.envelope_id  + '/documents/combined';
-    gs.info('Envelope Document endpoint: ' + envelopeURL);
-    var restMessage = new sn_ws.RESTMessageV2();
-    restMessage.setHttpMethod('GET');
-    restMessage.setEndpoint(envelopeURL);
-    restMessage.setRequestHeader('Authorization', 'Bearer ' + inputs.access_token);
-    var response = restMessage.execute();
-    var statusCode = response.getStatusCode();
-    gs.info('DocuSign Status code: ' + statusCode);
-    var responseBody = response.getBody();
-    var responseBodyBase64 = GlideStringUtil.base64Encode(responseBody);
-    var pdf = new GlideSysAttachment().writeBase64('sc_req_item', ritm, '', 'application/pdf', 'Software Request_DocuSign_signed_document.pdf', responseBodyBase64);    
-    gs.info('Attachment sys_id: ' + pdf);
 })(inputs, outputs);
 
 
