@@ -77,6 +77,7 @@ var envelopeId = responseBody.envelopeResponse.envelopeId;
     var endpoint = 'https://' + instanceName + '.service-now.com/api/now/attachment/file';
     gs.info('SNow Document upload endpoint: ' + endpoint);
     var restMessage = new sn_ws.RESTMessageV2();
+    restMessage.setBasicAuth(username, password);
     restMessage.setHttpMethod('POST');
     restMessage.setEndpoint(endpoint);
     restMessage.setRequestHeader('Content-Type', 'application/pdf');
