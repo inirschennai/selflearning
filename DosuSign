@@ -1,3 +1,22 @@
+var ritm = new GlideRecord('sc_req_item');
+ritm.get('aec79906eb43011008f2951ff15228f0');
+
+//var ritmsysid = 'aec79906eb43011008f2951ff15228f0';
+var testBase64 = GlideStringUtil.base64Encode('test');
+//var testPdf = new GlideSysAttachment().writeBase64('sc_req_item', ritmsysid, '', 'application/pdf', 'test.pdf', testBase64);
+//gs.info('Test attachment sys_id: ' + testPdf);
+
+var DecodedBytes = GlideStringUtil.base64DecodeAsBytes(testBase64);
+
+var attach = new GlideSysAttachment();
+
+attach.write(ritm, 'test.pdf', 'application/pdf', DecodedBytes);
+
+
+Security restricted: MIME type mismatch for file: test.pdf. Expected type:application/pdf, Actual type: text/plain
+Security restricted: File type is not allowed or does not match the content for file test.pdf
+
+
 {
     "status": "sent",
     "templateId": "21c78170-35c9-44bc-a2d3-27fced71d198",
