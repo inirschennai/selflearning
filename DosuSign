@@ -22,6 +22,14 @@
     ]
 }
 
+var response = restMessage.execute();
+var responseBody = response.getBody();
+var parsedResponse = JSON.parse(responseBody);
+gs.info("Response from DocuSign: " + JSON.stringify(parsedResponse));
+gs.info("Access Token: " + parsedResponse.accessToken);
+gs.info("Refresh Token: " + parsedResponse.refreshToken);
+gs.info("Rest: " + JSON.stringify(parsedResponse.envelopeResponse));
+
 Response from DocuSign: "{\"result\":{\"accessToken\":\"eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQsAAAABAAUABwCA6vIUxabcSAgAgCoWIwin3EgCAPBFnxJENkdMudscvAtO_DcVAAEAAAAYAAEAAAAFAAAADQAkAAAAMTNkZWRhMjgtOTVlNC00YzdiLTgzMDMtNjhjYjNlNGEyNGYwIgAkAAAAMTNkZWRhMjgtOTVlNC00YzdiLTgzMDMtNjhjYjNlNGEyNGYwMAAA-l1kdqbcSDcAGmwPV9OKvkSnXLwbyC6tzRIAAQAAAA0AAAByZWZyZXNoX3Rva2Vu.Z2jUihnYaS5R0SGpmah8VeRrJsGa48SI1rT6fv6XG1al-zhs1lckJQq10PL6NeyES2jDVt8qOqu_ceW88r3DUhdcYPS7tnMebPqMcjtbqZoHZZmCgv7yiE963w7XwdgfxlpYdE8LRqA4DTVWXSuskqPACnGfrj9p5ctHRo2F7cqPEK6uo75gaoWNHbjS1Sf3JA_g7iq0ByXpO8yOFkvNcJ-CX2eKiwkH4dw-BIThPHXn8F1NPjM1KebMP8quViKBLqyuZS3_Zcq3F-28yqZI5hxmH5-ewVwati6020iIMPnCLKcVPrP0M8BkQZJWDXMgAg0g_mV0tpALS4LIUUlzxQ\",\"refreshToken\":\"eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQoAAAABAAgABwCA6vIUxabcSAgAgGpXDVi-3EgCAPBFnxJENkdMudscvAtO_DcVAAEAAAAYAAEAAAAFAAAADQAkAAAAMTNkZWRhMjgtOTVlNC00YzdiLTgzMDMtNjhjYjNlNGEyNGYwIgAkAAAAMTNkZWRhMjgtOTVlNC00YzdiLTgzMDMtNjhjYjNlNGEyNGYwMAAA-l1kdqbcSDcAGmwPV9OKvkSnXLwbyC6tzQ.PPMhSMu_9qCsQgeKNCJzmQlfNyPe7Qxq3iRE24AZFpygaszLgqWI5MditISOaU_lFzm_c7X0ZmtlQoiq9lqct6canyOlDGJ_acmijG16Lq-rVg97pq91xbHzTfOuFEmZS89iy3vktXwrPf0eT62Uzy9Z5jDZryEDKuk_XUoRia9yF8GOM06VqtoGXI2_LOCt1JX5tty0xURjKOmoIdvDf2jd2sxzroPPIHhLnrLXZo3UiiMG2c0Z1u-_6uRSWa3oGoGUMW_Cv_BEts-kIVeAr6rXBh9VEexWpRymBy4KHOC2ZPEshricCA-WEHB6AWOhr0YDsWl5Sl2IatFwFMp-4w\",\"envelopeResponse\":{\"envelopeId\":\"c46a21ab-a2ae-4f75-8951-60deac31c846\",\"uri\":\"/envelopes/c46a21ab-a2ae-4f75-8951-60deac31c846\",\"statusDateTime\":\"2024-07-18T01:00:58.7770000Z\",\"status\":\"sent\"}}}"
 
 
