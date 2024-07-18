@@ -8,6 +8,8 @@ var testBase64 = GlideStringUtil.base64Encode('test');
 
 var DecodedBytes = GlideStringUtil.base64DecodeAsBytes(testBase64);
 
+Please approve Software Request via DocuSign for RITM0000005
+
 var attach = new GlideSysAttachment();
 
 attach.write(ritm, 'test.pdf', 'application/pdf', DecodedBytes);
