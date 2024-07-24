@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+
+  <style>
+    /* You can add CSS styles here to customize the input field appearance */
+  </style>
+
+  <script>
+    var my_dashboardMessageHandler = new DashboardMessageHandler("task_updated_by_filter");
+
+    function publishFilter(searchTerm) {
+      var filter_message = {};
+      filter_message.id = "task_updated_by_filter";
+      filter_message.table = "task";
+
+      if (searchTerm == "") {
+        clearFilter();
+      } else {
+        // This filter searche  for the partial match in the field....
+        filter_message.filter = "sys_updated_byLIKE" + searchTerm;
+      }
+
+      SNC.canvas.interactiveFilters.setDefaultValue({
+        id: filter_message.id,
+        filters: [filter_message]
+      }, false);
+
+      my_dashboardMessageHandler.publishFilter(filter_message.table, filter_message.filter);
+    }
+
+    function clearFilter() {
+      var filter_message = {};
+      filter_message.id = "task_updated_by_filter";
+      filter_message.table = "task";
+      filter_message.filter = "";
+
+      SNC.canvas.interactiveFilters.setDefaultValue({
+        id: filter_message.id,
+        filters: [filter_message]
+      }, false);
+
+      my_dashboardMessageHandler.removeFilter();
+    }
+  </script>
+
+  <input id="searchTerm" type="text" class="form-control" value="" onchange="publishFilter(this.value);"></input>
+
+</j:jelly>
