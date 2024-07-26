@@ -1,3 +1,11 @@
+audit_tablename = 'sc_task' && audit_fieldname = 'assignment_group'
+
+audit_documentkey = sctask_sys_id
+
+sc_task (sctask)
+sys_audit (audit)
+
+
 <?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
 
