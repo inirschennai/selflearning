@@ -70,7 +70,7 @@ GetUserGroups.prototype = {
 
     getGroups: function() {
         var gr = new GlideRecord('sys_user_group');
-		gr.addActiveQuery();
+	gr.addActiveQuery();
         gr.query();
         var groups = [];
         while (gr.next()) {
