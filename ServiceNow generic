@@ -52,15 +52,25 @@ sys_audit (audit)
 
   <g:evaluate var="groups">
     var groups = new GetUserGroups().getGroups();
+    gs.log("Groups fetched: " + JSON.stringify(groups)); // Debugging statement
     groups;
   </g:evaluate>
 
   <select id="searchTerm" class="form-control" onchange="publishFilter(this.value);">
     <option value="">Select a group</option>
     <j:forEach var="group" items="${groups}">
-      <option value="${group.sys_id}">${group.name}</option>
+      <j:if test="${group.sys_id != null && group.name != null}">
+        <option value="${group.sys_id}">${group.name}</option>
+      </j:if>
+      <j:else>
+        <script>
+          gs.log("Group missing sys_id or name: " + JSON.stringify(${group}));
+        </script>
+      </j:else>
     </j:forEach>
   </select>
+  
+</j:jelly>
   
 </j:jelly>
 
