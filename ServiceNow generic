@@ -52,11 +52,15 @@ sys_audit (audit)
     }
   </script>
 
-  <g:evaluate var="groups">
+  <g:evaluate var="groupsJson">
     var groups = new GetUserGroups().getGroups();
     gs.log("Groups fetched: " + JSON.stringify(groups)); // Debugging statement
-    groups;
+    JSON.stringify(groups);
   </g:evaluate>
+
+  <script>
+    var groups = JSON.parse('${groupsJson}');
+  </script>
 
   <select id="searchTerm" class="form-control" onchange="publishFilter(this.value);">
     <option value="">Select a group</option>
