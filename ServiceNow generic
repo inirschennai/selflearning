@@ -5,6 +5,8 @@ audit_documentkey = sctask_sys_id
 sc_task (sctask)
 sys_audit (audit)
 
+{"sys_id":"700b2ae31b699550ed9eeb58624bcbe9","name":"App-CDCR-ServiceNow-Projections"},{"sys_id":"700b6e2f872d155074bffdd8cebb35c0","name":"App-CDCR-ServiceNow-SharePointAdministration"},{"sys_id":"716a02551b3d7910ed9eeb58624bcbbc","name":"App-CDCR-ServiceNow-TSR-OM"},{"sys_id":"716a8e9d8739391074bffdd8cebb352c","name":"App-CDCR-ServiceNow-DesktopSupport-HQ-OEW"},{"sys_id":"71cfa66b876d155074bffdd8cebb354e","name":"App-CDCR-ServiceNow-ChangeControl"}
+
 
 <?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
