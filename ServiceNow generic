@@ -14,18 +14,17 @@ sys_audit (audit)
   </style>
 
   <script>
-    var my_dashboardMessageHandler = new DashboardMessageHandler("task_updated_by_filter");
+    var my_dashboardMessageHandler = new DashboardMessageHandler("catalog_task_teams_filter");
 
     function publishFilter(searchTerm) {
       var filter_message = {};
-      filter_message.id = "task_updated_by_filter";
-      filter_message.table = "task";
+      filter_message.id = "catalog_task_teams_filter";
+      filter_message.table = "u_audit_history_catalog_task_assignment_group";
 
       if (searchTerm == "") {
         clearFilter();
       } else {
-        // This filter searches for the partial match in the field....
-        filter_message.filter = "sys_updated_byLIKE" + searchTerm;
+        filter_message.filter = "oldgroup_nameLIKE"  + searchTerm + "^ORnewgroup_nameLIKE" + searchTerm;
       }
 
       SNC.canvas.interactiveFilters.setDefaultValue({
@@ -38,8 +37,8 @@ sys_audit (audit)
 
     function clearFilter() {
       var filter_message = {};
-      filter_message.id = "task_updated_by_filter";
-      filter_message.table = "task";
+      filter_message.id = "catalog_task_teams_filter";
+      filter_message.table = "u_audit_history_catalog_task_assignment_group";
       filter_message.filter = "";
 
       SNC.canvas.interactiveFilters.setDefaultValue({
@@ -62,7 +61,7 @@ sys_audit (audit)
       <option value="${group.sys_id}">${group.name}</option>
     </j:forEach>
   </select>
-
+  
 </j:jelly>
 
 var GetUserGroups = Class.create();
@@ -71,6 +70,7 @@ GetUserGroups.prototype = {
 
     getGroups: function() {
         var gr = new GlideRecord('sys_user_group');
+		gr.addActiveQuery();
         gr.query();
         var groups = [];
         while (gr.next()) {
@@ -84,7 +84,3 @@ GetUserGroups.prototype = {
 
     type: 'GetUserGroups'
 };
-
-
-
-
