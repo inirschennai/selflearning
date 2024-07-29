@@ -51,18 +51,10 @@ sys_audit (audit)
     }
   </script>
 
-  <g2:evaluate var="groups">
-    var gr = new GlideRecord('sys_user_group');
-    gr.query();
-    var groups = [];
-    while (gr.next()) {
-      groups.push({
-        sys_id: gr.sys_id.toString(),
-        name: gr.name.toString()
-      });
-    }
+  <g:evaluate var="groups">
+    var groups = new GetUserGroups().getGroups();
     groups;
-  </g2:evaluate>
+  </g:evaluate>
 
   <select id="searchTerm" class="form-control" onchange="publishFilter(this.value);">
     <option value="">Select a group</option>
@@ -72,3 +64,27 @@ sys_audit (audit)
   </select>
 
 </j:jelly>
+
+var GetUserGroups = Class.create();
+GetUserGroups.prototype = {
+    initialize: function() {},
+
+    getGroups: function() {
+        var gr = new GlideRecord('sys_user_group');
+        gr.query();
+        var groups = [];
+        while (gr.next()) {
+            groups.push({
+                sys_id: gr.sys_id.toString(),
+                name: gr.name.toString()
+            });
+        }
+        return groups;
+    },
+
+    type: 'GetUserGroups'
+};
+
+
+
+
