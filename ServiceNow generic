@@ -12,33 +12,49 @@
   </g:evaluate>
 
   <div id="groups_display">
-    <select id='group_select' class="form-control widget-content select2" onchange="filter_group()">
+    <select id='group_select' class="form-control widget-content select2" onchange="publishFilter()">
       <option value="">Select a Group</option>
       <g:options choiceList="${jvar_groups}" />
     </select>
   </div>
 
-  <script>
-    var dbh = new DashboardMessageHandler("filter_group");
+   <script>
+    var my_dashboardMessageHandler = new DashboardMessageHandler("task_updated_by_filter");
 
-    function filter_group() {
-      var group = $j('#group_select').val();
-      console.log("Selected group:", group); // Debugging statement
-      if (group) {
-        dbh.publishFilter('u_audit_history_catalog_task_assignment_group', 'newgroup_sys_idLIKE' + group + '^ORoldgroup_sys_idLIKE' + group);
-        console.log("Filter published for group:", group); // Debugging statement
+    function publishFilter() {
+      var filter_message = {};
+      filter_message.id = "task_updated_by_filter";
+      filter_message.table = "u_audit_history_catalog_task_assignment_group";
+
+	  var group = $j('#group_select').val();
+
+      if (group == "") {
+        clearFilter();
       } else {
-        dbh.removeFilter();
-        console.log("Filter removed"); // Debugging statement
+        // This filter searche  for the partial match in the field....
+        filter_message.filter = 'newgroup_sys_idLIKE' + group + '^ORoldgroup_sys_idLIKE' + group;
       }
+
+      SNC.canvas.interactiveFilters.setDefaultValue({
+        id: filter_message.id,
+        filters: [filter_message]
+      }, false);
+
+      my_dashboardMessageHandler.publishFilter(filter_message.table, filter_message.filter);
     }
 
-    // Ensure the filter is applied on page load if a group is already selected
-    $j(document).ready(function() {
-      var initialGroup = $j('#group_select').val();
-      if (initialGroup) {
-        filter_group();
-      }
-    });
+    function clearFilter() {
+      var filter_message = {};
+      filter_message.id = "task_updated_by_filter";
+      filter_message.table = "u_audit_history_catalog_task_assignment_group";
+      filter_message.filter = "";
+
+      SNC.canvas.interactiveFilters.setDefaultValue({
+        id: filter_message.id,
+        filters: [filter_message]
+      }, false);
+
+      my_dashboardMessageHandler.removeFilter();
+    }
   </script>
 </j:jelly>
