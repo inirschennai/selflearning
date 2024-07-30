@@ -19,16 +19,26 @@
   </div>
 
   <script>
-      var dbh = new DashboardMessageHandler("filter_group");
-	  function filter_group() {
-        var group = $j('#group_select').val();
-    	if (group) {
-        	dbh.publishFilter('u_audit_history_catalog_task_assignment_group', 'newgroup_sys_idLIKE' + group + '^ORoldgroup_sys_idLIKE' + group);			
-      	} 
-		else 
-		{
-        	dbh.removeFilter();
-      	}
+    var dbh = new DashboardMessageHandler("filter_group");
+
+    function filter_group() {
+      var group = $j('#group_select').val();
+      console.log("Selected group:", group); // Debugging statement
+      if (group) {
+        dbh.publishFilter('u_audit_history_catalog_task_assignment_group', 'newgroup_sys_idLIKE' + group + '^ORoldgroup_sys_idLIKE' + group);
+        console.log("Filter published for group:", group); // Debugging statement
+      } else {
+        dbh.removeFilter();
+        console.log("Filter removed"); // Debugging statement
+      }
     }
+
+    // Ensure the filter is applied on page load if a group is already selected
+    $j(document).ready(function() {
+      var initialGroup = $j('#group_select').val();
+      if (initialGroup) {
+        filter_group();
+      }
+    });
   </script>
 </j:jelly>
