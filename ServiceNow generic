@@ -19,6 +19,15 @@
   </div>
 
    <script>
+
+    // Initialize Select2 on the dropdown
+    $j(document).ready(function() {
+      $j('#group_select').select2({
+        placeholder: "Select a Group",
+        allowClear: true
+      });
+    });
+
     var my_dashboardMessageHandler = new DashboardMessageHandler("task_updated_by_filter");
 
     function publishFilter() {
