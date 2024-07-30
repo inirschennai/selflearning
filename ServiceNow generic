@@ -60,7 +60,7 @@ sys_audit (audit)
 
   <script>
     var groups = JSON.parse('${groupsJson}');
-  </script>
+  </script>  
 
   <select id="searchTerm" class="form-control" onchange="publishFilter(this.value);">
     <option value="">Select a group</option>
@@ -70,6 +70,7 @@ sys_audit (audit)
       });
     </script>
   </select>
+  
 </j:jelly>
 
 var GetUserGroups = Class.create();
