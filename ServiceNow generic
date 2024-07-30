@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
-  <g:evaluate var="jvar_groups" object="false" jelly="true">
+  <g:evaluate var="jvar_groups" object="true" jelly="true">
     var cl = new GlideChoiceList();
     var gr = new GlideRecord('sys_user_group');
     gr.addActiveQuery();
     gr.query();
     while (gr.next()) {
-      cl.add(gr.getValue('sys_id'), gr.getDisplayValue('name'));
+      cl.add(gr.getValue('sys_id'), gr.getValue('name'));
     }
     cl;
   </g:evaluate>
@@ -14,21 +14,21 @@
   <div id="groups_display">
     <select id='group_select' class="form-control widget-content select2" onchange="filter_group()">
       <option value="">Select a Group</option>
-      <j:forEach var="option" items="${jvar_groups.getChoices()}">
-        <option value="${option.getValue()}">${option.getLabel()}</option>
-      </j:forEach>
+      <g:options choiceList="${jvar_groups}" />
     </select>
   </div>
 
   <script>
-    function filter_group() {
       var dbh = new DashboardMessageHandler("filter_group");
-      var group = document.getElementById('group_select').value;
-      if (group) {
-        dbh.publishFilter('u_audit_history_catalog_task_assignment_group', 'oldgroup_nameLIKE' + group);
-      } else {
-        dbh.removeFilter();
-      }
+	  function filter_group() {
+        var group = $j('#group_select').val();
+    	if (group) {
+        	dbh.publishFilter('u_audit_history_catalog_task_assignment_group', 'newgroup_sys_idLIKE' + group + '^ORoldgroup_sys_idLIKE' + group);			
+      	} 
+		else 
+		{
+        	dbh.removeFilter();
+      	}
     }
   </script>
 </j:jelly>
