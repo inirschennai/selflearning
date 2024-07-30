@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
-<g:evaluate var="jvar_l3s" object="false" jelly="true">
-var cl = new GlideChoiceList();
-var gr = new GlideRecord('apm_application_category');
-gr.orderBy('name');
-gr.query();
-while(gr.next())
-{
-cl.add(gr.getValue('sys_id'), gr.getDisplayValue());
-}
-</g:evaluate>
+	<g:evaluate var="jvar_groups" object="false" jelly="true">
+		var cl = new GlideChoiceList();
+		var gr = new GlideRecord('sys_user_group');
+		gr.groupBy('sys_id');
+		gr.groupBy('name');
+		gr.addActiveQuery();
+		gr.query();
+		while(gr.next())
+		{
+			cl.add(gr.getValue('sys_id'), gr.getDisplayValue());
+		}
+	</g:evaluate>
 
-<div id="l3_display" style="display: none">
-<select id='l3_select' class="form-control widget-content select2">
-<option value="">All</option>
-<g:options choiceList='${jvar_l3s}' />
-</select>
-</div>
+	<div id="groups_display" style="display: none">
+		<select id='group_select' class="form-control widget-content select2">
+			<option value="">Select a Group</option>
+			<g:options choiceList='${jvar_groups}' />
+		</select>
+	</div>
 
-<script>
-var dbh = new DashboardMessageHandler("filter_l3");
-function filterl3(){
-var l3 = $j('#l3_select').val();
-if (l3)
-dbh.publishFilter('cmdb_ci_business_app','u_secondary_technologyLIKEl3');
-else
-dbh.removeFilter();
-}
-filterl3();
-</script>
+	<script>
+		var dbh = new DashboardMessageHandler("filter_group");
+		function filter_group(){
+		var group = $j('#group_select').val();
+		if (group)
+			dbh.publishFilter('u_audit_history_catalog_task_assignment_group','oldgroup_nameLIKE' + group);
+		else
+			dbh.removeFilter();
+		}
+		filter_group();
+	</script>
 </j:jelly>
