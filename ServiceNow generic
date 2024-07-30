@@ -60,13 +60,19 @@ sys_audit (audit)
 
   <script>
     var groups = JSON.parse('${groupsJson}');
+    window.addEventListener('DOMContentLoaded', (event) => {
+      var select = document.getElementById('searchTerm');
+      groups.forEach(function(group) {
+        var option = document.createElement('option');
+        option.value = group.sys_id;
+        option.text = group.name;
+        select.appendChild(option);
+      });
+    });
   </script>  
 
   <select id="searchTerm" class="form-control" onchange="publishFilter(this.value);">
     <option value="">Select a group</option>
-    <j:forEach var="group" items="${groups}">
-      <option value="${group.sys_id}">${group.name}</option>
-    </j:forEach>
   </select>
   
 </j:jelly>
