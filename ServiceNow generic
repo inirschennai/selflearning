@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
   <g:evaluate var="jvar_groups" object="false" jelly="true">
-    <![CDATA[
     var cl = new GlideChoiceList();
     var gr = new GlideRecord('sys_user_group');
     gr.addActiveQuery();
     gr.query();
-    while(gr.next()) {
-      cl.add(gr.getValue('sys_id'), gr.getDisplayValue());
+    while (gr.next()) {
+      cl.add(gr.getValue('sys_id'), gr.getDisplayValue('name'));
     }
     cl;
-    ]]>
   </g:evaluate>
 
   <div id="groups_display">
