@@ -1,178 +1,32 @@
-
 <?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+<g:evaluate var="jvar_l3s" object="false" jelly="true">
+var cl = new GlideChoiceList();
+var gr = new GlideRecord('apm_application_category');
+gr.orderBy('name');
+gr.query();
+while(gr.next())
+{
+cl.add(gr.getValue('sys_id'), gr.getDisplayValue());
+}
+</g:evaluate>
 
-  <style>
-    /* You can add CSS styles here to customize the input field appearance */
-  </style>
+<div id="l3_display" style="display: none">
+<select id='l3_select' class="form-control widget-content select2">
+<option value="">All</option>
+<g:options choiceList='${jvar_l3s}' />
+</select>
+</div>
 
-  <script>
-    var my_dashboardMessageHandler = new DashboardMessageHandler("catalog_task_teams_filter");
-
-    function publishFilter(searchTerm) {
-      var filter_message = {};
-      filter_message.id = "catalog_task_teams_filter";
-      filter_message.table = "u_audit_history_catalog_task_assignment_group";
-
-      if (searchTerm == "") {
-        clearFilter();
-      } else {
-        filter_message.filter = "oldgroup_nameLIKE"  + searchTerm + "^ORnewgroup_nameLIKE" + searchTerm;
-      }
-
-      SNC.canvas.interactiveFilters.setDefaultValue({
-        id: filter_message.id,
-        filters: [filter_message]
-      }, false);
-
-      my_dashboardMessageHandler.publishFilter(filter_message.table, filter_message.filter);
-    }
-
-    function clearFilter() {
-      var filter_message = {};
-      filter_message.id = "catalog_task_teams_filter";
-      filter_message.table = "u_audit_history_catalog_task_assignment_group";
-      filter_message.filter = "";
-
-      SNC.canvas.interactiveFilters.setDefaultValue({
-        id: filter_message.id,
-        filters: [filter_message]
-      }, false);
-
-      my_dashboardMessageHandler.removeFilter();
-    }
-  </script>
-
-  <g:evaluate var="groups">
-    var groups = new GetUserGroups().getGroups();
-    gs.log("Groups fetched: " + groups.join(', ')); // Debugging statement
-    groups;
-  </g:evaluate>   
-
-  <select id="searchTerm" class="form-control" onchange="publishFilter(this.value);">
-    <option value="">Select a group</option>
-    <j:forEach var="group" items="${groups}">
-      <option value="${group}">${group}</option>
-    </j:forEach>
-  </select>
-  
+<script>
+var dbh = new DashboardMessageHandler("filter_l3");
+function filterl3(){
+var l3 = $j('#l3_select').val();
+if (l3)
+dbh.publishFilter('cmdb_ci_business_app','u_secondary_technologyLIKEl3');
+else
+dbh.removeFilter();
+}
+filterl3();
+</script>
 </j:jelly>
-
-var GetUserGroups = Class.create();
-GetUserGroups.prototype = {
-    initialize: function() {},
-
-    getGroups: function() {
-        var gr = new GlideRecord('sys_user_group');
-		gr.addActiveQuery();
-        gr.query();
-        var groups = [];
-        while (gr.next()) {
-            groups.push(gr.name.toString());
-        }
-        return groups;
-    },
-
-    type: 'GetUserGroups'
-};
-
-
-audit_tablename = 'sc_task' && audit_fieldname = 'assignment_group'
-
-audit_documentkey = sctask_sys_id
-
-sc_task (sctask)
-sys_audit (audit)
-
-[{"sys_id":"700b2ae31b699550ed9eeb58624bcbe9","name":"App-CDCR-ServiceNow-Projections"},{"sys_id":"700b6e2f872d155074bffdd8cebb35c0","name":"App-CDCR-ServiceNow-SharePointAdministration"},{"sys_id":"716a02551b3d7910ed9eeb58624bcbbc","name":"App-CDCR-ServiceNow-TSR-OM"},{"sys_id":"716a8e9d8739391074bffdd8cebb352c","name":"App-CDCR-ServiceNow-DesktopSupport-HQ-OEW"},{"sys_id":"71cfa66b876d155074bffdd8cebb354e","name":"App-CDCR-ServiceNow-ChangeControl"}]
-
-
-<?xml version="1.0" encoding="utf-8" ?>
-<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
-
-  <style>
-    /* You can add CSS styles here to customize the input field appearance */
-  </style>
-
-  <script>
-    var my_dashboardMessageHandler = new DashboardMessageHandler("catalog_task_teams_filter");
-
-    function publishFilter(searchTerm) {
-      var filter_message = {};
-      filter_message.id = "catalog_task_teams_filter";
-      filter_message.table = "u_audit_history_catalog_task_assignment_group";
-
-      if (searchTerm == "") {
-        clearFilter();
-      } else {
-        filter_message.filter = "oldgroup_nameLIKE"  + searchTerm + "^ORnewgroup_nameLIKE" + searchTerm;
-      }
-
-      SNC.canvas.interactiveFilters.setDefaultValue({
-        id: filter_message.id,
-        filters: [filter_message]
-      }, false);
-
-      my_dashboardMessageHandler.publishFilter(filter_message.table, filter_message.filter);
-    }
-
-    function clearFilter() {
-      var filter_message = {};
-      filter_message.id = "catalog_task_teams_filter";
-      filter_message.table = "u_audit_history_catalog_task_assignment_group";
-      filter_message.filter = "";
-
-      SNC.canvas.interactiveFilters.setDefaultValue({
-        id: filter_message.id,
-        filters: [filter_message]
-      }, false);
-
-      my_dashboardMessageHandler.removeFilter();
-    }
-  </script>
-
-  <g:evaluate var="groupsJson">
-    var groups = new GetUserGroups().getGroups();
-    gs.log("Groups fetched: " + JSON.stringify(groups)); // Debugging statement
-    JSON.stringify(groups);
-  </g:evaluate>
-
-  <script>
-    var groups = JSON.parse('${groupsJson}');
-    window.addEventListener('DOMContentLoaded', (event) => {
-      var select = document.getElementById('searchTerm');
-      groups.forEach(function(group) {
-        var option = document.createElement('option');
-        option.value = group.sys_id;
-        option.text = group.name;
-        select.appendChild(option);
-      });
-    });
-  </script>  
-
-  <select id="searchTerm" class="form-control" onchange="publishFilter(this.value);">
-    <option value="">Select a group</option>
-  </select>
-  
-</j:jelly>
-
-var GetUserGroups = Class.create();
-GetUserGroups.prototype = {
-    initialize: function() {},
-
-    getGroups: function() {
-        var gr = new GlideRecord('sys_user_group');
-	gr.addActiveQuery();
-        gr.query();
-        var groups = [];
-        while (gr.next()) {
-            groups.push({
-                sys_id: gr.sys_id.toString(),
-                name: gr.name.toString()
-            });
-        }
-        return groups;
-    },
-
-    type: 'GetUserGroups'
-};
