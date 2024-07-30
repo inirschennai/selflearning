@@ -1,3 +1,79 @@
+
+<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+
+  <style>
+    /* You can add CSS styles here to customize the input field appearance */
+  </style>
+
+  <script>
+    var my_dashboardMessageHandler = new DashboardMessageHandler("catalog_task_teams_filter");
+
+    function publishFilter(searchTerm) {
+      var filter_message = {};
+      filter_message.id = "catalog_task_teams_filter";
+      filter_message.table = "u_audit_history_catalog_task_assignment_group";
+
+      if (searchTerm == "") {
+        clearFilter();
+      } else {
+        filter_message.filter = "oldgroup_nameLIKE"  + searchTerm + "^ORnewgroup_nameLIKE" + searchTerm;
+      }
+
+      SNC.canvas.interactiveFilters.setDefaultValue({
+        id: filter_message.id,
+        filters: [filter_message]
+      }, false);
+
+      my_dashboardMessageHandler.publishFilter(filter_message.table, filter_message.filter);
+    }
+
+    function clearFilter() {
+      var filter_message = {};
+      filter_message.id = "catalog_task_teams_filter";
+      filter_message.table = "u_audit_history_catalog_task_assignment_group";
+      filter_message.filter = "";
+
+      SNC.canvas.interactiveFilters.setDefaultValue({
+        id: filter_message.id,
+        filters: [filter_message]
+      }, false);
+
+      my_dashboardMessageHandler.removeFilter();
+    }
+  </script>
+
+  <g:evaluate var="groups">
+    var groups = new GetUserGroups().getGroups();
+    gs.log("Groups fetched: " + groups.join(', ')); // Debugging statement
+	groups;
+  </g:evaluate>   
+
+  <select id="searchTerm" class="form-control" onchange="publishFilter(this.value);">
+    <option value="">Select a group</option>
+  </select>
+  
+</j:jelly>
+
+var GetUserGroups = Class.create();
+GetUserGroups.prototype = {
+    initialize: function() {},
+
+    getGroups: function() {
+        var gr = new GlideRecord('sys_user_group');
+		gr.addActiveQuery();
+        gr.query();
+        var groups = [];
+        while (gr.next()) {
+            groups.push(gr.name.toString());
+        }
+        return groups;
+    },
+
+    type: 'GetUserGroups'
+};
+
+
 audit_tablename = 'sc_task' && audit_fieldname = 'assignment_group'
 
 audit_documentkey = sctask_sys_id
