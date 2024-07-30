@@ -46,11 +46,14 @@
   <g:evaluate var="groups">
     var groups = new GetUserGroups().getGroups();
     gs.log("Groups fetched: " + groups.join(', ')); // Debugging statement
-	groups;
+    groups;
   </g:evaluate>   
 
   <select id="searchTerm" class="form-control" onchange="publishFilter(this.value);">
     <option value="">Select a group</option>
+    <j:forEach var="group" items="${groups}">
+      <option value="${group}">${group}</option>
+    </j:forEach>
   </select>
   
 </j:jelly>
