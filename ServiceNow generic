@@ -1,3 +1,35 @@
+// Function to get sys_id based on display value
+function getSysIdByDisplayValue(tableName, displayValue, displayField) {
+    var gr = new GlideRecord(tableName);
+    gr.addQuery(displayField, displayValue);
+    gr.query();
+    if (gr.next()) {
+        return gr.sys_id.toString();
+    } else {
+        return null; // No record found
+    }
+}
+
+// Example usage
+var tableName = 'cmdb_ci'; // Replace with your referenced table name
+var displayValue = 'My CI Name'; // Replace with your display value
+var displayField = 'name'; // Replace with your display field
+
+var sysId = getSysIdByDisplayValue(tableName, displayValue, displayField);
+
+if (sysId) {
+    var gr = new GlideRecord('sc_req_item'); // Replace with your catalog item table
+    if (gr.get('sys_id_of_catalog_item')) { // Replace with the sys_id of the catalog item
+        gr.u_reference_field = sysId; // Replace with your reference field name
+        gr.update();
+        gs.info('Reference field set successfully');
+    } else {
+        gs.info('Catalog item not found');
+    }
+} else {
+    gs.info('Referenced record not found');
+}
+
 (function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
 
     // implement resource here
