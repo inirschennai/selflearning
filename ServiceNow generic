@@ -1,69 +1,25 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
-  <g:evaluate var="jvar_groups" object="true" jelly="true">
-    var cl = new GlideChoiceList();
-    var gr = new GlideRecord('sys_user_group');
-    gr.addActiveQuery();
-    gr.query();
-    while (gr.next()) {
-      cl.add(gr.getValue('sys_id'), gr.getValue('name'));
-    }
-    cl;
-  </g:evaluate>
+(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
 
-  <div id="groups_display">
-    <select id='group_select' class="form-control widget-content select2" onchange="publishFilter()">
-      <option value="">Select a Group</option>
-      <g:options choiceList="${jvar_groups}" />
-    </select>
-  </div>
+    // implement resource here
+	var arr = [];
+	var params = request.pathParams;
+	var user_sys_id = params.user_sys_id;
+	var sarecords = params.records;
+	gs.log("User: " + user_sys_id);
+	gs.log("Records: " + sarecords);
+	response.setBody({'User': user_sys_id, 'Records': sarecords});	
+	
+	var cartId = GlideGuid.generate(null);
+	var cart = new Cart(cartId);
 
-   <script>
+	//add your requested item to the cart by sys_id of the catalog item
+	var item = cart.addItem('ad4c3cef1baedd10f367fe6edd4bcbc1', 1);
 
-    // Initialize Select2 on the dropdown
-    $j(document).ready(function() {
-      $j('#group_select').select2({
-        placeholder: "Select a Group",
-        allowClear: true
-      });
-    });
+	//fill in the variables on the request item form
+	cart.setVariable(item,"requested_by", user_sys_id); 
+	cart.setVariable(item,"what_are_the_service_acccount_that_need_to_be_certified", sarecords);
+	var rc = cart.placeOrder();
 
-    var my_dashboardMessageHandler = new DashboardMessageHandler("task_updated_by_filter");
+})(request, response);
 
-    function publishFilter() {
-      var filter_message = {};
-      filter_message.id = "task_updated_by_filter";
-      filter_message.table = "u_audit_history_catalog_task_assignment_group";
 
-	  var group = $j('#group_select').val();
-
-      if (group == "") {
-        clearFilter();
-      } else {
-        // This filter searche  for the partial match in the field....
-        filter_message.filter = 'newgroup_sys_idLIKE' + group + '^ORoldgroup_sys_idLIKE' + group;
-      }
-
-      SNC.canvas.interactiveFilters.setDefaultValue({
-        id: filter_message.id,
-        filters: [filter_message]
-      }, false);
-
-      my_dashboardMessageHandler.publishFilter(filter_message.table, filter_message.filter);
-    }
-
-    function clearFilter() {
-      var filter_message = {};
-      filter_message.id = "task_updated_by_filter";
-      filter_message.table = "u_audit_history_catalog_task_assignment_group";
-      filter_message.filter = "";
-
-      SNC.canvas.interactiveFilters.setDefaultValue({
-        id: filter_message.id,
-        filters: [filter_message]
-      }, false);
-
-      my_dashboardMessageHandler.removeFilter();
-    }
-  </script>
-</j:jelly>
