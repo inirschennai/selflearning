@@ -1,3 +1,46 @@
+(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+    // Extract parameters from the request
+    var params = request.body.data;
+    var itemName = params.itemName;
+    var itemDescription = params.itemDescription;
+    var itemPrice = params.itemPrice;
+
+    // Create a new cart
+    var cart = new Cart();
+    var cartItem = cart.addItem('YOUR_CATALOG_ITEM_SYS_ID'); // Replace with your catalog item sys_id
+
+    // Set variables for the catalog item
+    cart.setVariable(cartItem, 'itemName', itemName);
+    cart.setVariable(cartItem, 'itemDescription', itemDescription);
+    cart.setVariable(cartItem, 'itemPrice', itemPrice);
+
+    // Submit the cart and generate the RITM
+    var cartId = cart.placeOrder();
+    var ritm = new GlideRecord('sc_req_item');
+    ritm.addQuery('request', cartId);
+    ritm.query();
+
+    if (ritm.next()) {
+        // Set the response object
+        var responseData = {
+            status: 'success',
+            message: 'Catalog item and RITM created successfully',
+            ritmNumber: ritm.getValue('number'),
+            ritmUrl: gs.getProperty('glide.servlet.uri') + 'sc_req_item.do?sys_id=' + ritm.getUniqueValue()
+        };
+        response.setStatus(201); // Created
+        response.setBody(responseData);
+    } else {
+        // Handle the error case for RITM creation
+        var errorData = {
+            status: 'error',
+            message: 'Failed to create RITM'
+        };
+        response.setStatus(500); // Internal Server Error
+        response.setBody(errorData);
+    }
+})(request, response);
+
 // Function to get sys_id based on display value
 function getSysIdByDisplayValue(tableName, displayValue, displayField) {
     var gr = new GlideRecord(tableName);
