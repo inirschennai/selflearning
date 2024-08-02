@@ -1,3 +1,82 @@
+# Define the variables
+$clientId = "YOUR_CLIENT_ID"
+$clientSecret = "YOUR_CLIENT_SECRET"
+$username = "YOUR_USERNAME"
+$password = "YOUR_PASSWORD"
+
+# Encode the client ID and secret
+$encodedAuth = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("$clientId:$clientSecret"))
+
+# Define the token endpoint URL
+$tokenUrl = "https://$instanceName.service-now.com/oauth_token.do"
+
+# Create the body for the POST request
+$body = @{
+    grant_type = "password"
+    username = $username
+    password = $password
+}
+
+# Convert the body to a URL-encoded string
+$bodyEncoded = [System.Web.HttpUtility]::ParseQueryString([System.String]::Empty)
+$body.GetEnumerator() | ForEach-Object { $bodyEncoded.Add($_.Key, $_.Value) }
+$bodyString = $bodyEncoded.ToString()
+
+# Define the headers
+$headers = @{
+    "Authorization" = "Basic $encodedAuth"
+    "Content-Type"  = "application/x-www-form-urlencoded"
+}
+
+# Make the POST request to get the tokens
+$response = Invoke-RestMethod -Uri $tokenUrl -Method Post -Headers $headers -Body $bodyString
+
+# Output the tokens
+$accessToken = $response.access_token
+$refreshToken = $response.refresh_token
+
+Write-Host "Access Token: $accessToken"
+Write-Host "Refresh Token: $refreshToken"
+
+# Define the variables
+$clientId = "YOUR_CLIENT_ID"
+$clientSecret = "YOUR_CLIENT_SECRET"
+$refreshToken = "YOUR_REFRESH_TOKEN"
+
+# Encode the client ID and secret
+$encodedAuth = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("$clientId:$clientSecret"))
+
+# Define the token endpoint URL
+$tokenUrl = "https://$instanceName.service-now.com/oauth_token.do"
+
+# Create the body for the POST request
+$body = @{
+    grant_type = "refresh_token"
+    refresh_token = $refreshToken
+}
+
+# Convert the body to a URL-encoded string
+$bodyEncoded = [System.Web.HttpUtility]::ParseQueryString([System.String]::Empty)
+$body.GetEnumerator() | ForEach-Object { $bodyEncoded.Add($_.Key, $_.Value) }
+$bodyString = $bodyEncoded.ToString()
+
+# Define the headers
+$headers = @{
+    "Authorization" = "Basic $encodedAuth"
+    "Content-Type"  = "application/x-www-form-urlencoded"
+}
+
+# Make the POST request to get the new access token
+$response = Invoke-RestMethod -Uri $tokenUrl -Method Post -Headers $headers -Body $bodyString
+
+# Output the new access token
+$accessToken = $response.access_token
+
+Write-Host "New Access Token: $accessToken"
+
+
+
+
 (function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
     // Extract parameters from the request
     var params = request.body.data;
