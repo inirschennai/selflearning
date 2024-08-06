@@ -1,39 +1,43 @@
-Access token: vfvtjbLQj_HQnAD9Db9M4bsjEZcqRK6vwuRcMRB4JVP2bUPuR8UhxXnEyw2XV8MDgSLRDfOeDqdOUhAZGz97Dw
-Refresh token: NnC6WbrtEt2zg47dtsOIpfoQSOTSFA0daxrzcxgmluoqmVLyfGfQ5R_3TOyAXxBSsFENbL1-cnOPrgCgsoYjpQ
+# Define the access token and endpoint
 
-client_id - f52e7330d0b30e50f087f7d687d8da24
-client_secret - 4Y?].RfXdv
+$endpoint = "https://cdcrnonprod.servicenowservices.com/api/g_cdo2/successfactors"
+$accessToken = "vfvtjbLQj_HQnAD9Db9M4bsjEZcqRK6vwuRcMRB4JVP2bUPuR8UhxXnEyw2XV8MDgSLRDfOeDqdOUhAZGz97Dw"
 
-Endpoint:  https://cdcrnonprod.servicenowservices.com/api/g_cdo2/successfactors
-Message body: 
+# Define the message body
+$body = @{
+    requested_for = "Srinivasan Parthasarathy"
+    requested_by = "Srinivasan Parthasarathy"
+    requester_location = "EIS 1940-Enterprise Information Services-HQ000006"
+    requester_phone = "818-357-0507"
+    onboarding_type = "New Hire"
+    employee_full_name = "Joe Newhire"
+    start_date = "2024-08-01"
+    end_date = ""
+    employee_pernr = "1"
+    employee_former_work_location = ""
+    employee_former_job_title = ""
+    employee_work_location = "EIS 1940-Enterprise Information Services-HQ000006"
+    employee_job_title = "Account Clerk II"
+    employee_s_direct_supervisor = "Sukhjit Badwal"
+    soms = ""
+    erms = ""
+    obiee_reporting = ""
+    hca = ""
+    leads = ""
+    none = "true"
+    distribution_lists_or_security_groups_access = ""
+    teams_phone_number_needed = "yes"
+    additional_information = ""
+} | ConvertTo-Json
 
-{   "requested_for": "Srinivasan Parthasarathy",
-    "requested_by": "Srinivasan Parthasarathy",
-    "requester_location": "EIS 1940-Enterprise Information Services-HQ000006", 
-    "requester_phone" : "818-357-0507",
-    "onboarding_type": "New Hire",
-    "employee_full_name": "Joe Newhire",
-    "start_date": "2024-08-01", 
-    "end_date" : "",
-    "employee_pernr": "1",
-    "employee_former_work_location": "",
-    "employee_former_job_title": "", 
-    "employee_work_location" : "EIS 1940-Enterprise Information Services-HQ000006",
-    "employee_job_title": "Account Clerk II",
-    "employee_s_direct_supervisor": "Sukhjit Badwal",
-    "soms": "", 
-    "erms" : "",
-    "obiee_reporting": "",
-    "hca": "",
-    "leads": "", 
-    "none" : "true",
-    "distribution_lists_or_security_groups_access": "",
-    "teams_phone_number_needed": "yes",
-    "additional_information": ""
-}
+# Make the POST request
+$response = Invoke-RestMethod -Uri $endpoint -Method Post -Headers @{
+    "Authorization" = "Bearer $accessToken"
+    "Content-Type" = "application/json"
+} -Body $body
 
-
-
+# Output the response
+$response
 
 # Define the variables
 $clientId = "YOUR_CLIENT_ID"
