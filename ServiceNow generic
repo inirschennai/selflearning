@@ -97,9 +97,7 @@ $body = @{
 }
 
 # Convert the body to a URL-encoded string
-$bodyEncoded = [System.Web.HttpUtility]::ParseQueryString([System.String]::Empty)
-$body.GetEnumerator() | ForEach-Object { $bodyEncoded.Add($_.Key, $_.Value) }
-$bodyString = $bodyEncoded.ToString()
+$bodyString = ($body.GetEnumerator() | ForEach-Object { "$($_.Key)=$([System.Net.WebUtility]::UrlEncode($_.Value))" }) -join "&"
 
 # Define the headers
 $headers = @{
