@@ -1,3 +1,23 @@
+(function() {
+    var fieldName = 'group'; // The name of the field you want to change
+    var tableName = 'sys_user_grmember'; // The name of the table
+
+    // Get the dictionary entry for the field
+    var gr = new GlideRecord('sys_dictionary');
+    gr.addQuery('name', tableName);
+    gr.addQuery('element', fieldName);
+    gr.query();
+
+    if (gr.next()) {
+        gr.internal_type = 'reference'; // Set the field type to 'reference'
+        gr.reference = 'sys_user_group'; // Set the reference table
+        gr.update();
+        gs.print('Field type changed to reference for ' + fieldName + ' on table ' + tableName);
+    } else {
+        gs.print('Field not found');
+    }
+})();
+
 # Define the access token and endpoint
 
 $endpoint = "https://cdcrnonprod.servicenowservices.com/api/g_cdo2/successfactors"
