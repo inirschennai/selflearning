@@ -1,3 +1,32 @@
+(function executeRule(current, previous /*null when async*/) {
+    // Function to get the next Thursday date
+    function getNextThursday(date) {
+        var dayOfWeek = date.getDay();
+        var daysUntilThursday = (4 - dayOfWeek + 7) % 7; // 4 is Thursday (0 is Sunday)
+        if (daysUntilThursday === 0) {
+            daysUntilThursday = 7; // If today is Thursday, get the next Thursday
+        }
+        var nextThursday = new Date(date);
+        nextThursday.setDate(date.getDate() + daysUntilThursday);
+        return nextThursday;
+    }
+
+    // Get the current date and the next Thursday date
+    var currentDate = new Date();
+    var nextThursday = getNextThursday(currentDate);
+
+    // Get the start date from the form
+    var startDate = g_form.getValue('start_date');
+    var startDateObj = new Date(startDate);
+
+    // Check if the start date is before the next Thursday
+    if (startDateObj < nextThursday) {
+        g_form.showFieldMsg('start_date', 'Start date must be on or after the next Thursday.', 'error');
+        g_form.setValue('start_date', nextThursday.toISOString().split('T')[0]); // Set to next Thursday
+    }
+})(current, previous);
+
+
 (function() {
     var fieldName = 'group'; // The name of the field you want to change
     var tableName = 'sys_user_grmember'; // The name of the table
