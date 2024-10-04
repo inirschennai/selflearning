@@ -1,3 +1,11 @@
+(function() {
+    // Check if the Assignment Group field is cleared
+    if (g_scratchpad.assignment_group == '') {
+        // Clear the Assigned To field
+        g_form.setValue('assigned_to', '');
+    }
+})();
+
 (function executeRule(current, previous /*null when async*/) {
     // Function to get the next Thursday date
     function getNextThursday(date) {
