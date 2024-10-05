@@ -1,10 +1,23 @@
-(function() {
-    // Check if the Assignment Group field is cleared
-    if (g_scratchpad.assignment_group == '') {
-        // Clear the Assigned To field
-        g_form.setValue('assigned_to', '');
-    }
-})();
+function onCellEdit(sysIDs, table, oldValues, newValue, callback) {
+  var saveAndClose = true;
+ //Type appropriate comment here, and begin script below
+
+	if (newValue != oldValues)
+	{
+		sysIDs.forEach(function(sysID)
+		{
+			var gr = new GlideRecord('incident');
+			if (gr.get(sysID))
+			{
+				gr.setValue('assigned_to','');
+				gr.update();
+			}
+		});
+
+	}
+ 
+ callback(saveAndClose); 
+}
 
 (function executeRule(current, previous /*null when async*/) {
     // Function to get the next Thursday date
