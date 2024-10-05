@@ -1,22 +1,25 @@
 function onCellEdit(sysIDs, table, oldValues, newValue, callback) {
   var saveAndClose = true;
- //Type appropriate comment here, and begin script below
 
-	if (newValue != oldValues)
-	{
-		sysIDs.forEach(function(sysID)
-		{
-			var gr = new GlideRecord('incident');
-			if (gr.get(sysID))
-			{
-				gr.setValue('assigned_to','');
-				gr.update();
-			}
-		});
+  // Iterate through the oldValues array to check if the new value is different from any old value
+  for (var i = 0; i < oldValues.length; i++) {
+    if (newValue != oldValues[i]) {
+      // Ask for user confirmation before clearing the 'assigned_to' field
+      if (confirm('Do you want to clear the Assigned To field for record ' + sysIDs[i] + '?')) {
+        // Iterate through the sysIDs to clear the 'assigned_to' field for each record
+        sysIDs.forEach(function(sysID) {
+          var gr = new GlideRecord(table);
+          if (gr.get(sysID)) {
+            gr.setValue('assigned_to', '');
+            gr.update();
+          }
+        });
+      }
+    }
+  }
 
-	}
- 
- callback(saveAndClose); 
+  // Execute the callback function to complete the onCellEdit action
+  callback(saveAndClose);
 }
 
 (function executeRule(current, previous /*null when async*/) {
