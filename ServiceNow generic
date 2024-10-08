@@ -1,5 +1,18 @@
-current.work_notes = current.getDisplayValue('assigned_to') + ' for '+ current.getDisplayValue('request_item.requested_for') + ' - ' + current.number;
+// Get the 'requested_for' field from the 'request_item' table
+var requestedFor = current.request_item.requested_for;
 
+// Get the first name and last name of the 'requested_for' user
+var userGR = new GlideRecord('sys_user');
+if (userGR.get(requestedFor)) {
+    var firstName = userGR.getValue('first_name');
+    var lastName = userGR.getValue('last_name');
+    
+    // Format the name as "First Name, First Initial of Last Name"
+    var formattedName = firstName + ', ' + lastName.charAt(0) + '.';
+    
+    // Update the work notes with the formatted name
+    current.work_notes = current.getDisplayValue('assigned_to') + ' for ' + formattedName + ' - ' + current.number;
+}
 function onCellEdit(sysIDs, table, oldValues, newValue, callback) {
 	
 	// Iterate through the oldValues array to check if the new value is different from any old value
