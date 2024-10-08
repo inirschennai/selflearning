@@ -1,3 +1,5 @@
+current.work_notes = current.getDisplayValue('assigned_to') + ' for '+ current.getDisplayValue('request_item.requested_for') + ' - ' + current.number;
+
 function onCellEdit(sysIDs, table, oldValues, newValue, callback) {
 	
 	// Iterate through the oldValues array to check if the new value is different from any old value
