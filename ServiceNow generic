@@ -3,12 +3,10 @@ gr.query();
 while (gr.next()) {
   var userGR = new GlideRecord('sys_user');
   if (!userGR.get(gr.user)) {
-    gs.log('Invalid sys_id found in group membership for user: ' + gr.user + ' for group: ' + gr.group.name);
-	
-  }
-  else
-  {
-	gs.log('This record is OK');
+    gs.log('Deleting invalid sys_id in group membership for user: ' + gr.user + ' for group: ' + gr.group.name);
+    gr.deleteRecord();
+  } else {
+    gs.log('This record is OK for user: ' + gr.user + ' in group: ' + gr.group.name);
   }
 }
 
