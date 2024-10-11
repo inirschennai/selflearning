@@ -1,12 +1,24 @@
 var gr = new GlideRecord('sys_user_grmember');
 gr.query();
+
+var recordsToDelete = [];
+
 while (gr.next()) {
   var userGR = new GlideRecord('sys_user');
   if (!userGR.get(gr.user)) {
-    gs.log('Deleting invalid sys_id in group membership for user: ' + gr.user + ' for group: ' + gr.group.name);
-    gr.deleteRecord();
+    gs.log('Marking invalid sys_id for deletion in group membership for user: ' + gr.user + ' for group: ' + gr.group.name);
+    recordsToDelete.push(gr.sys_id.toString());
   } else {
     gs.log('This record is OK for user: ' + gr.user + ' in group: ' + gr.group.name);
+  }
+}
+
+// Delete the marked records
+for (var i = 0; i < recordsToDelete.length; i++) {
+  var deleteGR = new GlideRecord('sys_user_grmember');
+  if (deleteGR.get(recordsToDelete[i])) {
+    deleteGR.deleteRecord();
+    gs.log('Deleted record with sys_id: ' + recordsToDelete[i]);
   }
 }
 
