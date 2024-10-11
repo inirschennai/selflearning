@@ -1,13 +1,16 @@
 var gr = new GlideRecord('sys_user_grmember');
-gr.addQuery('group', '[Your Group\'s Sys ID]');
 gr.query();
 while (gr.next()) {
   var userGR = new GlideRecord('sys_user');
   if (!userGR.get(gr.user)) {
-    gs.log('Invalid sys_id found in group membership: ' + gr.user);
+    gs.log('Invalid sys_id found in group membership for user: ' + gr.user + ' for group: ' + gr.group.name);
+	
+  }
+  else
+  {
+	gs.log('This record is OK');
   }
 }
-
 
 // Get the 'requested_for' field from the 'request_item' table
 var requestedFor = current.request_item.requested_for;
