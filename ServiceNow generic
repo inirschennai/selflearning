@@ -8,23 +8,27 @@ function onSubmit() {
  
    // Check if the start date is before the next Thursday
    if (startDateObj < nextThursday) {
-		g_form.setValue('start_date', formatDateTime(nextThursday)); // Set to next Thursday with local time
-		g_form.showFieldMsg('start_date', 'Start date must be on or after the next Thursday.', 'error');
-		return false; // Prevent form submission
+       g_form.setValue('start_date', formatDateTime(nextThursday)); // Set to next Thursday with local time
+       g_form.showFieldMsg('start_date', 'Start date must be on or after the Thursday following a 6-day lead time.', 'error');
+       return false; // Prevent form submission
    }
 
    return true; // Allow form submission if the date is valid
 }
 
-// Function to get the next Thursday date
+// Function to get the next Thursday date after a 6-day lead time
 function getNextThursday(date) {
-   var dayOfWeek = date.getDay();
+   var leadTime = 7; // 7-day lead time
+   var leadDate = new Date(date);
+   leadDate.setDate(date.getDate() + leadTime);
+
+   var dayOfWeek = leadDate.getDay();
    var daysUntilThursday = (4 - dayOfWeek + 7) % 7; // 4 is Thursday (0 is Sunday)
    if (daysUntilThursday === 0) {
        daysUntilThursday = 7; // If today is Thursday, get the next Thursday
    }
-   var nextThursday = new Date(date);
-   nextThursday.setDate(date.getDate() + daysUntilThursday);
+   var nextThursday = new Date(leadDate);
+   nextThursday.setDate(leadDate.getDate() + daysUntilThursday);
    nextThursday.setHours(0, 0, 0, 0); // Set time to midnight
    return nextThursday;
 }
@@ -34,7 +38,7 @@ function formatDateTime(date) {
    var year = date.getFullYear();
    var month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are zero-based
    var day = ('0' + date.getDate()).slice(-2);
-   var hours = '12';
+   var hours = '00';
    var minutes = '00';
    var seconds = '00';
    return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds + ' AM';
