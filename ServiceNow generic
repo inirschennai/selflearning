@@ -1,8 +1,8 @@
 var isSettingValue = false;
 
-function onChange(control, oldValue, newValue, isLoading, isTemplate) {
-   if (isLoading || newValue === '' || isSettingValue) {
-      return;
+function onSubmit() {
+   if (isSettingValue) {
+      return false; // Prevent form submission
    }
 
    var currentDate = new Date();
@@ -18,7 +18,10 @@ function onChange(control, oldValue, newValue, isLoading, isTemplate) {
        isSettingValue = true;
        g_form.setValue('start_date', nextThursday.toISOString()); // Set to next Thursday with time
        isSettingValue = false;
+       return false; // Prevent form submission
    }
+
+   return true; // Allow form submission if the date is valid
 }
 
 // Function to get the next Thursday date
