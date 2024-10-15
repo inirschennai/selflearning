@@ -34,7 +34,6 @@ function getNextThursday(date) {
    return nextThursday;
 }
 
-
 var gr = new GlideRecord('sys_user_grmember');
 gr.query();
 
