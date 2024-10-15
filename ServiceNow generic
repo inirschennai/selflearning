@@ -1,10 +1,4 @@
-var isSettingValue = false;
-
 function onSubmit() {
-   if (isSettingValue) {
-      return false; // Prevent form submission
-   }
-
    var currentDate = new Date();
    var nextThursday = getNextThursday(currentDate);
  
@@ -15,9 +9,7 @@ function onSubmit() {
    // Check if the start date is before the next Thursday
    if (startDateObj < nextThursday) {
        g_form.showFieldMsg('start_date', 'Start date must be on or after the next Thursday.', 'error');
-       isSettingValue = true;
        g_form.setValue('start_date', nextThursday.toISOString()); // Set to next Thursday with time
-       isSettingValue = false;
        return false; // Prevent form submission
    }
 
