@@ -8,9 +8,9 @@ function onSubmit() {
  
    // Check if the start date is before the next Thursday
    if (startDateObj < nextThursday) {
-       g_form.showFieldMsg('start_date', 'Start date must be on or after the next Thursday.', 'error');
-       g_form.setValue('start_date', formatDateTime(nextThursday)); // Set to next Thursday with local time
-       return false; // Prevent form submission
+		g_form.setValue('start_date', formatDateTime(nextThursday)); // Set to next Thursday with local time
+		g_form.showFieldMsg('start_date', 'Start date must be on or after the next Thursday.', 'error');
+		return false; // Prevent form submission
    }
 
    return true; // Allow form submission if the date is valid
@@ -37,7 +37,7 @@ function formatDateTime(date) {
    var hours = '12';
    var minutes = '00';
    var seconds = '00';
-   return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds + 'AM';
+   return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds + ' AM';
 }
 
 var gr = new GlideRecord('sys_user_grmember');
