@@ -1,15 +1,50 @@
+Client Controller:
+
+(function() {
+  /* Initialize the necessary data and configurations for the map components */
+  c.showMap = true;
+  c.indoorMapConfig = {
+    // Add your indoor map configuration here
+  };
+  c.wsdIndoorMapObject = { isMapwizeLoading: false }; // Add your indoor map object
+  c.legends = [
+    { name: 'Available', color: '#00FF00' },
+    { name: 'Reserved', color: '#FF0000' },
+    { name: 'Occupied', color: '#0000FF' }
+  ];
+  c.floorSelectorOptions = {
+    floors: [
+      { id: 'floor1', name: 'Floor 1' },
+      { id: 'floor2', name: 'Floor 2' }
+    ],
+    selectedFloor: 'floor1'
+  };
+  c.buildingSelectorOptions = {
+    buildings: [
+      { id: 'building1', name: 'Building 1' },
+      { id: 'building2', name: 'Building 2' }
+    ],
+    selectedBuilding: 'building1'
+  };
+  c.indoorMapCardTemplate = '<div>{{cardData.name}}</div>';
+  c.cardData = { name: 'Sample Card Data' };
+  c.patternEnabled = true; // Assuming pattern is enabled
+  c.displayUserNamesOnMap = true; // Assuming user names should be displayed on the map
+
+  // Function to refresh the map
+  function refreshMap() {
+    // Logic to refresh the map
+    // This could be a simple reload or a more sophisticated refresh logic
+    location.reload();
+  }
+
+  // Set interval to refresh the map every 5 minutes (300000 milliseconds)
+  setInterval(refreshMap, 300000);
+})();
+
 Body HTML template:
 
-<div class="map-view" ng-if="c.mapType==c.MAP_TYPE.MAPPEDIN && c.activeView.type === 'map'">
-  <wsd-mappedin-map
-    ng-if="c.showMap"
-    map-config="c.mappedinConfig"
-    mappedin-map-data="c.wsdMappedinReservationData"
-    on-space-select="c.onMapSpaceSelect"
-    templates="c.wsdMappedinTemplates"
-    on-floor-change="c.mountWsdMappedinComponent"/>
-</div>
-<div class="map-view indoor-map-container" ng-if="c.mapType==c.MAP_TYPE.INDOOR_MAPS" ng-show="c.activeView.type === 'map' && !c.missingSpaceMap">
+<div class="map-view indoor-map-container" ng-show="c.showMap">
   <div ng-class="{'map-overlay' : c.wsdIndoorMapObject.isMapwizeLoading}" ng-if="c.wsdIndoorMapObject.isMapwizeLoading">
     <div class="loading-text">
       <div class="fa fa-spinner fa-spin spinner-margin" aria-hidden="true" name="spinner" spin="true"></div>
@@ -38,59 +73,7 @@ Body HTML template:
   </div>
 </div>
 
-Client Controller:
-
-(function() {
-  /* Initialize the necessary data and configurations for the map components */
-  c.isRegularSearch = false;
-  c.isFromShowMore = false;
-  c.filterCount = 0;
-  c.activeView = { type: 'map' };
-  c.viewOptions = null;
-  c.reservationId = null;
-  c.reservableMapper = null;
-  c.hasMore = false;
-  c.isEditing = false;
-  c.prBuildingTz = "";
-  c.secBuildingTz = "";
-  c.mappedReservables = []; // the view model of the original reservables
-  c.selectedItems = []; // the list of user selected items
-  c.searching = false;
-  c.wasSearched = false;
-  c.searchWasAuto = false;
-  c.showReservableFilter = false;
-  c.watcher = {};
-  c.isOccurrence = false;
-  c.isException = false;
-  c.canSubmitReservation = true;
-  c.missingSpaceMap = false;
-  c.wsdMappedinReservationData = null;
-  c.mappedinConfig = {}; // Add your mappedin map configuration
-  c.showMap = true;
-  c.isRecurring = false;
-  c.floorReservables = [];
-  c.onMapSpaceSelect = onMapSpaceSelect;
-  c.onMapEvent = onMapEvent;
-  c.mountWsdMappedinComponent = mountWsdMappedinComponent;
-  c.reservablesFavWidgets = {};
-  c.wsdMappedinTemplates = {
-    popupcard: $templateCache.get('map-rsv-popup.html'),
-    tooltip: $templateCache.get('map-default-rsv-tooltip')
-  };
-  c.resultMsg = {
-    title: '',
-    msg: ''
-  };
-  c.legends = []; // Add your legends
-  c.floorSelectorOptions = {}; // Add your floor selector options
-  c.buildingSelectorOptions = {}; // Add your building selector options
-  c.indoorMapCardTemplate = ''; // Add your indoor map card template
-  c.cardData = {}; // Add your card data
-  c.patternEnabled = false; // Add your pattern enabled flag
-  c.displayUserNamesOnMap = false; // Add your display user names on map flag
-})();
-
-Server Script:
+Server script:
 
 (function() {
   data.isFavoritesEnabled = ($sp.getValue('enable_favorites') === 'true') && gs.tableExists('sn_ex_sp_favorite_content_config');
@@ -144,6 +127,7 @@ Server Script:
   }
 })();
 
+
 CSS:
 
 .map-view {
@@ -178,8 +162,6 @@ CSS:
 .spinner-margin {
   margin-right: 10px;
 }
-
-
 
 function onSubmit() {
    var currentDate = new Date();
