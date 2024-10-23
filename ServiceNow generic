@@ -81,12 +81,15 @@ CSS:
   background-color: #63666A;
   color: white;
   font-weight: 700;
+  text-align: center; /* Center the header titles */
+  vertical-align: middle; /* Ensure vertical alignment is middle */
 }
 
 .table-rounded td {
   line-height: 1.5;
+  text-align: center; /* Center the table data */
+  vertical-align: middle; /* Ensure vertical alignment is middle */
 }
-
 
 
 
