@@ -1,18 +1,94 @@
-function($window, $interval) {
-  
+Body HTML template:
+
+<div>
+  <table class="table-rounded">
+    <thead>
+      <tr>
+        <th>Requester</th>
+        <th>Reservation Start</th>
+        <th>Reservation End</th>
+        <th>Check-in State</th>
+        <th>Reservation State</th>
+        <th>Reservation Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="reservation in data.reservations">
+        <td>{{reservation.requested_for}}</td>
+        <td>{{reservation.start}}</td>
+        <td>{{reservation.end}}</td>
+        <td>{{reservation.check_in_state}}</td>
+        <td>{{reservation.state}}</td>
+        <td>{{reservation.reservation_subtype}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+Client Controller:
+
+function($scope, $window, $interval) {
+  /* widget controller */
+  var c = this;
+
   // Set interval to refresh the page every 1 minute
-  $interval(function(){
-	$window.location.reload();
-  },60000);
+  $interval(function() {
+    $window.location.reload();
+  }, 60000);
 }
 
-Query:
+Server script:
 
-reservable_module=542a76aa87f5f11074bffdd8cebb35a7^check_in_state=checked_in
+(function() {
+  data.reservations = [];
 
-sn_wsd_rsv_reservation
+  var gr = new GlideRecord('sn_wsd_rsv_reservation');
+  gr.addEncodedQuery('reservable_module=542a76aa87f5f11074bffdd8cebb35a7^check_in_state=checked_in');
+  gr.query();
 
-requested_for, start, end, check_in_state, state, reservation_subtype
+  while (gr.next()) {
+    data.reservations.push({
+      requested_for: gr.getDisplayValue('requested_for'),
+      start: gr.getDisplayValue('start'),
+      end: gr.getDisplayValue('end'),
+      check_in_state: gr.getDisplayValue('check_in_state'),
+      state: gr.getDisplayValue('state'),
+      reservation_subtype: gr.getDisplayValue('reservation_subtype')
+    });
+  }
+})();
+
+CSS:
+
+.table-rounded {
+  border: 1.5px solid gainsboro;
+  text-align: center;
+  vertical-align: middle;
+  font-family: "Roboto Light";
+  font-size: 14px;
+  white-space: nowrap;
+  width: 100%;
+  margin: 10px auto;
+  border-collapse: collapse;
+}
+
+.table-rounded th, .table-rounded td {
+  border: 1px solid gainsboro;
+  padding: 8px;
+}
+
+.table-rounded th {
+  background-color: #63666A;
+  color: white;
+  font-weight: 700;
+}
+
+.table-rounded td {
+  line-height: 1.5;
+}
+
+
+
 
 
 <div>
