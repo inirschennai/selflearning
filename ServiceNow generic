@@ -2,7 +2,7 @@
   <!-- This widget will refresh the page every 5 minutes -->
 </div>
 
-function refresh($scope, spUtil, $window, glideUserSession) {
+(function($window, $interval) {
   // Refresh interval in milliseconds (1 minute)
   var refreshInterval = 1 * 60 * 1000;
 
@@ -13,7 +13,7 @@ function refresh($scope, spUtil, $window, glideUserSession) {
 
   // Set interval to refresh the page
   $interval(refreshPage, refreshInterval);
-}
+})(window, angular.injector(['ng']).get('$interval'));
 
 Client Controller:
 
