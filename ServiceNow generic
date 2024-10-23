@@ -1,3 +1,12 @@
+Query:
+
+reservable_module=542a76aa87f5f11074bffdd8cebb35a7^check_in_state=checked_in
+
+sn_wsd_rsv_reservation
+
+requested_for, start, end, check_in_state, state, reservation_subtype
+
+
 <div>
   <!-- This widget will refresh the page every 5 minutes -->
 </div>
