@@ -2,9 +2,9 @@
   <!-- This widget will refresh the page every 5 minutes -->
 </div>
 
-function($scope, $window, $interval) {
-  // Refresh interval in milliseconds (5 minutes)
-  var refreshInterval = 5 * 60 * 1000;
+function refresh($scope, spUtil, $window, glideUserSession) {
+  // Refresh interval in milliseconds (1 minute)
+  var refreshInterval = 1 * 60 * 1000;
 
   // Function to refresh the page
   function refreshPage() {
