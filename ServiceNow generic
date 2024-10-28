@@ -2,9 +2,13 @@
 html, body {
   height: 100%;
   margin: 0;
+}
+
+.table-container {
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
+  height: 100vh; /* Full viewport height */
 }
 
 .table-rounded {
@@ -36,8 +40,6 @@ html, body {
   text-align: center; /* Center the table data */
   vertical-align: middle; /* Ensure vertical alignment is middle */
 }
-
-
 
 Body HTML template:
 
