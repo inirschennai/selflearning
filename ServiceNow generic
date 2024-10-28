@@ -1,3 +1,44 @@
+/* Ensure the parent container takes the full height of the viewport */
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+.table-rounded {
+  border: 1.5px solid gainsboro;
+  text-align: center;
+  vertical-align: middle;
+  font-family: "Roboto Light";
+  font-size: 14px;
+  white-space: nowrap;
+  width: 300px; /* Set a fixed width for the table */
+  border-collapse: collapse;
+}
+
+.table-rounded th, .table-rounded td {
+  border: 1px solid gainsboro;
+  padding: 8px;
+}
+
+.table-rounded th {
+  background-color: #63666A;
+  color: white;
+  font-weight: 700;
+  text-align: center; /* Center the header titles */
+  vertical-align: middle; /* Ensure vertical alignment is middle */
+}
+
+.table-rounded td {
+  line-height: 1.5;
+  text-align: center; /* Center the table data */
+  vertical-align: middle; /* Ensure vertical alignment is middle */
+}
+
+
+
 Body HTML template:
 
 <div>
