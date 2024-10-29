@@ -3,6 +3,7 @@
 
   var gr = new GlideRecord('sn_wsd_rsv_reservation');
   gr.addEncodedQuery('reservable_module=542a76aa87f5f11074bffdd8cebb35a7^check_in_state=checked_in');
+  gr.sort('start'); //Sory by reservation start date
   gr.query();
 
   while (gr.next()) {
@@ -26,12 +27,13 @@
     var reservationSubtype = gr.getDisplayValue('reservation_subtype') === 'Occurrence' ? 'Series' : gr.getDisplayValue('reservation_subtype');
 
     data.reservations.push({
-      requested_for: gr.getDisplayValue('requested_for'),
-      start: formattedStartDate,
-      end: formattedEndDate,
-      check_in_state: gr.getDisplayValue('check_in_state'),
-      state: gr.getDisplayValue('state'),
-      reservation_subtype: reservationSubtype
+		location: gr.getDisplayValue('location'),
+		requested_for: gr.getDisplayValue('requested_for'),
+		start: formattedStartDate,
+		end: formattedEndDate,
+		//check_in_state: gr.getDisplayValue('check_in_state'),
+		//state: gr.getDisplayValue('state'),
+		reservation_subtype: reservationSubtype
     });
   }
 
