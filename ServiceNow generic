@@ -9,8 +9,18 @@
     // Format the start and end dates
     var startDate = new GlideDateTime(gr.getValue('start'));
     var endDate = new GlideDateTime(gr.getValue('end'));
-    var formattedStartDate = startDate.getMonthNameLocalPart() + " " + startDate.getDayOfMonthLocalTime() + ", " + startDate.getDisplayValueInternal().substring(11, 16);
-    var formattedEndDate = endDate.getMonthNameLocalPart() + " " + endDate.getDayOfMonthLocalTime() + ", " + endDate.getDisplayValueInternal().substring(11, 16);
+
+    // Format the start date
+    var startMonth = startDate.getMonthLocalTime();
+    var startDay = startDate.getDayOfMonthLocalTime();
+    var startTime = startDate.getDisplayValue().split(' ')[1] + ' ' + startDate.getDisplayValue().split(' ')[2];
+    var formattedStartDate = getMonthName(startMonth) + " " + startDay + ", " + startTime;
+
+    // Format the end date
+    var endMonth = endDate.getMonthLocalTime();
+    var endDay = endDate.getDayOfMonthLocalTime();
+    var endTime = endDate.getDisplayValue().split(' ')[1] + ' ' + endDate.getDisplayValue().split(' ')[2];
+    var formattedEndDate = getMonthName(endMonth) + " " + endDay + ", " + endTime;
 
     // Replace reservation subtype if the display value is "Occurrence"
     var reservationSubtype = gr.getDisplayValue('reservation_subtype') === 'Occurrence' ? 'Series' : gr.getDisplayValue('reservation_subtype');
@@ -24,8 +34,13 @@
       reservation_subtype: reservationSubtype
     });
   }
-})();
 
+  // Helper function to get month name from month number
+  function getMonthName(month) {
+    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return monthNames[month - 1];
+  }
+})();
 
 <div class="count-container">
   <h3 class="title">Reservation Count</h3>
