@@ -3,7 +3,7 @@
 
   var gr = new GlideRecord('sn_wsd_rsv_reservation');
   gr.addEncodedQuery('reservable_module=542a76aa87f5f11074bffdd8cebb35a7^check_in_state=checked_in');
-  gr.sort('start'); //Sory by reservation start date
+  gr.orderBy('start'); // Sort by reservation start date
   gr.query();
 
   while (gr.next()) {
@@ -14,26 +14,28 @@
     // Format the start date
     var startMonth = startDate.getMonthLocalTime();
     var startDay = startDate.getDayOfMonthLocalTime();
-    var startTime = startDate.getDisplayValue().split(' ')[1] + ' ' + startDate.getDisplayValue().split(' ')[2];
+    var startTimeParts = startDate.getDisplayValue().split(' ')[1].split(':');
+    var startTime = startTimeParts[0] + ':' + startTimeParts[1] + ' ' + startDate.getDisplayValue().split(' ')[2];
     var formattedStartDate = getMonthName(startMonth) + " " + startDay + ", " + startTime;
 
     // Format the end date
     var endMonth = endDate.getMonthLocalTime();
     var endDay = endDate.getDayOfMonthLocalTime();
-    var endTime = endDate.getDisplayValue().split(' ')[1] + ' ' + endDate.getDisplayValue().split(' ')[2];
+    var endTimeParts = endDate.getDisplayValue().split(' ')[1].split(':');
+    var endTime = endTimeParts[0] + ':' + endTimeParts[1] + ' ' + endDate.getDisplayValue().split(' ')[2];
     var formattedEndDate = getMonthName(endMonth) + " " + endDay + ", " + endTime;
 
     // Replace reservation subtype if the display value is "Occurrence"
     var reservationSubtype = gr.getDisplayValue('reservation_subtype') === 'Occurrence' ? 'Series' : gr.getDisplayValue('reservation_subtype');
 
     data.reservations.push({
-		location: gr.getDisplayValue('location'),
-		requested_for: gr.getDisplayValue('requested_for'),
-		start: formattedStartDate,
-		end: formattedEndDate,
-		//check_in_state: gr.getDisplayValue('check_in_state'),
-		//state: gr.getDisplayValue('state'),
-		reservation_subtype: reservationSubtype
+      location: gr.getDisplayValue('location'),
+      requested_for: gr.getDisplayValue('requested_for'),
+      start: formattedStartDate,
+      end: formattedEndDate,
+      //check_in_state: gr.getDisplayValue('check_in_state'),
+      //state: gr.getDisplayValue('state'),
+      reservation_subtype: reservationSubtype
     });
   }
 
