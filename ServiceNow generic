@@ -1,5 +1,5 @@
 <div class="count-container">
-  <h3>Reservation Count</h3>
+  <h3 class="title">Reservation Count</h3>
   <p class="count">{{data.reservationCount}}</p>
 </div>
 
@@ -20,17 +20,18 @@ html, body {
   font-family: "Roboto Light";
 }
 
-.count-container h3 {
+.count-container .title {
   margin: 0;
-  font-size: 24px;
+  font-size: 28px; /* Increase the font size */
+  font-weight: bold; /* Make the title bold */
 }
 
 .count-container .count {
   font-size: 32px;
   font-weight: bold;
+  color: blue; /* Make the count text blue */
   margin: 10px 0;
 }
-
 
 
 <div class="table-container">
