@@ -1,3 +1,32 @@
+(function() {
+  data.reservations = [];
+
+  var gr = new GlideRecord('sn_wsd_rsv_reservation');
+  gr.addEncodedQuery('reservable_module=542a76aa87f5f11074bffdd8cebb35a7^check_in_state=checked_in');
+  gr.query();
+
+  while (gr.next()) {
+    // Format the start and end dates
+    var startDate = new GlideDateTime(gr.getValue('start'));
+    var endDate = new GlideDateTime(gr.getValue('end'));
+    var formattedStartDate = startDate.getMonthNameLocalPart() + " " + startDate.getDayOfMonthLocalTime() + ", " + startDate.getDisplayValueInternal().substring(11, 16);
+    var formattedEndDate = endDate.getMonthNameLocalPart() + " " + endDate.getDayOfMonthLocalTime() + ", " + endDate.getDisplayValueInternal().substring(11, 16);
+
+    // Replace reservation subtype if the display value is "Occurrence"
+    var reservationSubtype = gr.getDisplayValue('reservation_subtype') === 'Occurrence' ? 'Series' : gr.getDisplayValue('reservation_subtype');
+
+    data.reservations.push({
+      requested_for: gr.getDisplayValue('requested_for'),
+      start: formattedStartDate,
+      end: formattedEndDate,
+      check_in_state: gr.getDisplayValue('check_in_state'),
+      state: gr.getDisplayValue('state'),
+      reservation_subtype: reservationSubtype
+    });
+  }
+})();
+
+
 <div class="count-container">
   <h3 class="title">Reservation Count</h3>
   <p class="count">{{data.reservationCount}}</p>
