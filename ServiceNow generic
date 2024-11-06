@@ -1,3 +1,25 @@
+(function executeRule(current, previous /*null when async*/) {
+
+    // Get the value of the field
+    var macAddress = g_form.getValue('mac_address');
+
+    // Define the regular expression for MAC address validation
+    var macRegex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
+
+    // Validate the MAC address
+    if (!macRegex.test(macAddress)) {
+        // If the MAC address is invalid, display an error message
+        g_form.showFieldMsg('mac_address', 'Invalid MAC address format. Please use xx-xx-xx-xx-xx-xx or xx:xx:xx:xx:xx:xx format.', 'error');
+        // Clear the invalid value
+        g_form.clearValue('mac_address');
+    } else {
+        // If the MAC address is valid, clear any previous error messages
+        g_form.hideFieldMsg('mac_address');
+    }
+
+})(current, previous);
+
+
 (function() {
   data.reservations = [];
 
