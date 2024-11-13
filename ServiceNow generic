@@ -4,10 +4,19 @@ var CopyCatalogItemUtils = Class.create();
 CopyCatalogItemUtils.prototype = Object.extendsObject(AbstractAjaxProcessor, {
     getWhatWouldYouLikeToDo: function() {
         var ritmSysId = this.getParameter('sysparm_ritm');
-        var ritm = new GlideRecord('sc_req_item');
-        if (ritm.get(ritmSysId)) {
-            return ritm.getValue('what_would_you_like_to_do');
+        var variableName = 'what_would_you_like_to_do';
+        
+        // Query the sc_item_option_mtom table to find the variable value
+        var itemOptionMtom = new GlideRecord('sc_item_option_mtom');
+        itemOptionMtom.addQuery('request_item', ritmSysId);
+        itemOptionMtom.addQuery('sc_item_option.variable_name', variableName);
+        itemOptionMtom.query();
+        
+        if (itemOptionMtom.next()) {
+            var variableValue = itemOptionMtom.sc_item_option.value;
+            return variableValue;
         }
+        
         return '';
     }
 });
