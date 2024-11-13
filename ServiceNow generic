@@ -14,9 +14,13 @@ CopyCatalogItemUtils.prototype = Object.extendsObject(AbstractAjaxProcessor, {
 
 Client Script:
 
-(function executeRule(current, previous /*null when async*/) {
-    // Get the value of the RITM variable
-    var ritmToCopy = g_form.getValue('ritm_to_copy');
+function onChange(control, oldValue, newValue, isLoading) {
+   if (isLoading || newValue == '') {
+      return;
+   }
+   
+   // Get the value of the RITM variable
+    var ritmToCopy = g_form.getValue('ritm_to_be_copied');
 
     // Check if the RITM variable has a value
     if (ritmToCopy) {
@@ -32,8 +36,7 @@ Client Script:
             }
         });
     }
-})(current, previous);
-
+}
 
 
 <?xml version="1.0" encoding="utf-8" ?>
