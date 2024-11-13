@@ -1,3 +1,41 @@
+Script Include:
+
+var CopyCatalogItemUtils = Class.create();
+CopyCatalogItemUtils.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+    getWhatWouldYouLikeToDo: function() {
+        var ritmSysId = this.getParameter('sysparm_ritm');
+        var ritm = new GlideRecord('sc_req_item');
+        if (ritm.get(ritmSysId)) {
+            return ritm.getValue('what_would_you_like_to_do');
+        }
+        return '';
+    }
+});
+
+Client Script:
+
+(function executeRule(current, previous /*null when async*/) {
+    // Get the value of the RITM variable
+    var ritmToCopy = g_form.getValue('ritm_to_copy');
+
+    // Check if the RITM variable has a value
+    if (ritmToCopy) {
+        // Make a GlideAjax call to a Script Include to fetch the value
+        var ga = new GlideAjax('CopyCatalogItemUtils');
+        ga.addParam('sysparm_name', 'getWhatWouldYouLikeToDo');
+        ga.addParam('sysparm_ritm', ritmToCopy);
+        ga.getXMLAnswer(function(response) {
+            var answer = response.responseXML.documentElement.getAttribute('answer');
+            if (answer) {
+                // Set the value of the "What do you want to do?" variable
+                g_form.setValue('what_would_you_like_to_do', answer);
+            }
+        });
+    }
+})(current, previous);
+
+
+
 <?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
 
