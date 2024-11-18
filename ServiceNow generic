@@ -98,10 +98,14 @@ function onChange(control, oldValue, newValue, isLoading) {
 </j:jelly>
 
 
-(function executeRule(current, previous /*null when async*/) {
+function onChange(control, oldValue, newValue, isLoading) {
+   if (isLoading || newValue == '') {
+      return;
+   }
 
-    // Get the value of the field
+   // Get the value of the field
     var macAddress = g_form.getValue('mac_address');
+	//alert('MAC address: ' + macAddress);
 
     // Define the regular expression for MAC address validation
     var macRegex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
@@ -109,16 +113,18 @@ function onChange(control, oldValue, newValue, isLoading) {
     // Validate the MAC address
     if (!macRegex.test(macAddress)) {
         // If the MAC address is invalid, display an error message
-        g_form.showFieldMsg('mac_address', 'Invalid MAC address format. Please use xx-xx-xx-xx-xx-xx or xx:xx:xx:xx:xx:xx format.', 'error');
+		//alert('Invalid');
+        //g_form.showFieldMsg('mac_address', 'Invalid MAC address format. Please use xx-xx-xx-xx-xx-xx or xx:xx:xx:xx:xx:xx format.', 'error','true');
+		g_form.addErrorMessage('Invalid MAC address format. Please use xx-xx-xx-xx-xx-xx or xx:xx:xx:xx:xx:xx format.');
         // Clear the invalid value
         g_form.clearValue('mac_address');
     } else {
         // If the MAC address is valid, clear any previous error messages
-        g_form.hideFieldMsg('mac_address');
-    }
-
-})(current, previous);
-
+		//alert('Valid');
+        //g_form.hideFieldMsg('mac_address');
+		g_form.clearMessages();
+    }   
+}
 
 (function() {
   data.reservations = [];
