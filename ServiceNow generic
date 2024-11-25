@@ -12,7 +12,7 @@ CopyCatalogItemUtils.prototype = Object.extendsObject(AbstractAjaxProcessor, {
         itemOptionMtom.query();
 
         while (itemOptionMtom.next()) {
-            var variableName = itemOptionMtom.sc_item_option.variable_name;
+            var variableName = itemOptionMtom.sc_item_option.item_option_new.variable_name;
             var variableValue = itemOptionMtom.sc_item_option.value;
             variableValues[variableName] = variableValue;
         }
