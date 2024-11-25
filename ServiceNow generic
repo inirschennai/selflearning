@@ -2,51 +2,54 @@ Script Include:
 
 var CopyCatalogItemUtils = Class.create();
 CopyCatalogItemUtils.prototype = Object.extendsObject(AbstractAjaxProcessor, {
-    getWhatWouldYouLikeToDo: function() {
+    getVariableValues: function() {
         var ritmSysId = this.getParameter('sysparm_ritm');
-        var variableName = 'what_would_you_like_to_do';
-        
-        // Query the sc_item_option_mtom table to find the variable value
+        var variableValues = {};
+
+        // Query the sc_item_option_mtom table to find the variable values
         var itemOptionMtom = new GlideRecord('sc_item_option_mtom');
         itemOptionMtom.addQuery('request_item', ritmSysId);
-        itemOptionMtom.addQuery('sc_item_option.variable_name', variableName);
         itemOptionMtom.query();
-        
-        if (itemOptionMtom.next()) {
+
+        while (itemOptionMtom.next()) {
+            var variableName = itemOptionMtom.sc_item_option.variable_name;
             var variableValue = itemOptionMtom.sc_item_option.value;
-            return variableValue;
+            variableValues[variableName] = variableValue;
         }
-        
-        return '';
+
+        return JSON.stringify(variableValues);
     }
 });
 
 Client Script:
 
 function onChange(control, oldValue, newValue, isLoading) {
-   if (isLoading || newValue == '') {
-      return;
-   }
-   
-   // Get the value of the RITM variable
+    if (isLoading || newValue == '') {
+        return;
+    }
+
+    // Get the value of the RITM variable
     var ritmToCopy = g_form.getValue('ritm_to_be_copied');
 
     // Check if the RITM variable has a value
     if (ritmToCopy) {
-        // Make a GlideAjax call to a Script Include to fetch the value
+        // Make a GlideAjax call to a Script Include to fetch the values
         var ga = new GlideAjax('CopyCatalogItemUtils');
-        ga.addParam('sysparm_name', 'getWhatWouldYouLikeToDo');
+        ga.addParam('sysparm_name', 'getVariableValues');
         ga.addParam('sysparm_ritm', ritmToCopy);
         ga.getXMLAnswer(function(response) {
-            var answer = response.responseXML.documentElement.getAttribute('answer');
+            var answer = JSON.parse(response.responseXML.documentElement.getAttribute('answer'));
             if (answer) {
-                // Set the value of the "What do you want to do?" variable
-                g_form.setValue('what_would_you_like_to_do', answer);
+                // Iterate through the response object and set the values on the form
+                for (var variableName in answer) {
+                    if (answer.hasOwnProperty(variableName)) {
+                        g_form.setValue(variableName, answer[variableName]);
+                    }
+                }
             }
         });
     }
 }
-
 
 <?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
