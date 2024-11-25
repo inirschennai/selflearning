@@ -1,9 +1,13 @@
+
+Variable names and values (JSON string): {"requested_for":{},"additional_information":{},"location":{},"phone":{},"end_date_time":{},"user_impact":{},"issue_started":{},"approving_manager":{},"requested_by":{},"previous_ticket":{},"tech_info":{},"bulletin_recipients":{},"red_blue_container":{},"ccb":{},"start_date_time":{},"service_restoration_date_time":{},"summary":{},"bulletin_type":{},"formatter":{},"affected_users":{},"action_requested":{},"restoration_details":{}}
+
 Script Include:
 
 var CopyCatalogItemUtils = Class.create();
 CopyCatalogItemUtils.prototype = Object.extendsObject(AbstractAjaxProcessor, {
     getVariableValues: function() {
         var ritmSysId = this.getParameter('sysparm_ritm');
+		gs.info('Bulletin Request RITM: ' + ritmSysId);
         var variableValues = {};
 
         // Query the sc_item_option_mtom table to find the variable values
@@ -12,15 +16,16 @@ CopyCatalogItemUtils.prototype = Object.extendsObject(AbstractAjaxProcessor, {
         itemOptionMtom.query();
 
         while (itemOptionMtom.next()) {
-            var variableName = itemOptionMtom.sc_item_option.item_option_new.variable_name;
+            var variableName = itemOptionMtom.sc_item_option.item_option_new.name;
             var variableValue = itemOptionMtom.sc_item_option.value;
+			gs.info('Variable names and values: ' + variableName + ' ' + variableValue);
             variableValues[variableName] = variableValue;
         }
 
-        return JSON.stringify(variableValues);
+        gs.info("Variable names and values (JSON string): " + JSON.stringify(variableValues));
+		return JSON.stringify(variableValues);
     }
 });
-
 Client Script:
 
 function onChange(control, oldValue, newValue, isLoading) {
