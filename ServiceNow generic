@@ -52,9 +52,10 @@ function onChange(control, oldValue, newValue, isLoading) {
                 // Iterate through the response object and set the values on the form
                 for (var variableName in answer) {
 			console.log(variableName + ": " + answer[variableName]);
-                    if (answer.hasOwnProperty(variableName)) {
-                        g_form.setValue(variableName, answer[variableName]);
-                    }
+                    // Check if the variable name is not one of the excluded variables
+                        if (['requested_for', 'location', 'phone', 'requested_by'].indexOf(variableName) === -1) {
+                            g_form.setValue(variableName, answer[variableName]);
+                        }
 				}
 			} 
 			else 
