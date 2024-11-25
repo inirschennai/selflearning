@@ -24,32 +24,44 @@ CopyCatalogItemUtils.prototype = Object.extendsObject(AbstractAjaxProcessor, {
 Client Script:
 
 function onChange(control, oldValue, newValue, isLoading) {
-    if (isLoading || newValue == '') {
-        return;
-    }
-
-    // Get the value of the RITM variable
-    var ritmToCopy = g_form.getValue('ritm_to_be_copied');
-
-    // Check if the RITM variable has a value
+   if (isLoading || newValue == '') {
+      return;
+   }
+   
+   // Get the value of the RITM variable
+    var ritmToCopy = g_form.getValue('previous_ritm');
+	
+	// Check if the RITM variable has a value
     if (ritmToCopy) {
-        // Make a GlideAjax call to a Script Include to fetch the values
+        // Make a GlideAjax call to a Script Include to fetch the value
         var ga = new GlideAjax('CopyCatalogItemUtils');
         ga.addParam('sysparm_name', 'getVariableValues');
         ga.addParam('sysparm_ritm', ritmToCopy);
-        ga.getXMLAnswer(function(response) {
-            var answer = JSON.parse(response.responseXML.documentElement.getAttribute('answer'));
+		ga.getXML(PopulateVars);
+	}
+
+	function PopulateVars(response) {
+        if (response) {
+			var answer = JSON.parse(response.responseXML.documentElement.getAttribute('answer'));
             if (answer) {
                 // Iterate through the response object and set the values on the form
                 for (var variableName in answer) {
                     if (answer.hasOwnProperty(variableName)) {
                         g_form.setValue(variableName, answer[variableName]);
                     }
-                }
-            }
-        });
-    }
-}
+				}
+			} 
+			else 
+			{
+				alert('No answer received from the server.');
+			}
+        } 
+		else 
+		{
+            alert('No response received from the server.');
+        }
+	}        
+}	
 
 <?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
