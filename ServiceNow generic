@@ -19,7 +19,7 @@ CopyCatalogItemUtils.prototype = Object.extendsObject(AbstractAjaxProcessor, {
             var variableName = itemOptionMtom.sc_item_option.item_option_new.name;
             var variableValue = itemOptionMtom.sc_item_option.value;
 			gs.info('Variable names and values: ' + variableName + ' ' + variableValue);
-            variableValues[variableName] = variableValue;
+            variableValues[variableName] = variableValue.toString();
         }
 
         gs.info("Variable names and values (JSON string): " + JSON.stringify(variableValues));
