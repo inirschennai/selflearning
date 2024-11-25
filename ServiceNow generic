@@ -46,6 +46,7 @@ function onChange(control, oldValue, newValue, isLoading) {
             if (answer) {
                 // Iterate through the response object and set the values on the form
                 for (var variableName in answer) {
+			console.log(variableName + ": " + answer[variableName]);
                     if (answer.hasOwnProperty(variableName)) {
                         g_form.setValue(variableName, answer[variableName]);
                     }
