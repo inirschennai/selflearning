@@ -1,3 +1,139 @@
+Genesys chat:
+
+HTML:
+
+<g:ui_page>
+  <html>
+    <head>
+      <title>Chat Integration</title>
+      <link href="https://example.com/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+      <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+      <style type="text/css">
+        body {
+          color:#000000;
+          background-color:#0072C6;
+          margin:0;
+        }
+
+        #container {
+          margin-left:auto;
+          margin-right:auto;
+          text-align:center;
+        }
+
+        a img {
+          border:none;
+        }
+
+        #chat-bubble {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          background: #007bff;
+          color: white;
+          padding: 10px;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+
+        #chat-modal {
+          display: none;
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 400px;
+          background: white;
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #chat-modal-header {
+          padding: 10px;
+          border-bottom: 1px solid #ccc;
+          display: flex;
+          justify-content: space-between;
+        }
+
+        #close-modal {
+          background: none;
+          border: none;
+          cursor: pointer;
+        }
+      </style>
+    </head>
+    <body>
+      <div id="container">
+        <img src="example-image.png" alt="Example Image" width="1400" height="1000" />
+      </div>
+
+      <!-- Chat Bubble -->
+      <div id="chat-bubble">💬</div>
+
+      <!-- Modal Popup -->
+      <div id="chat-modal">
+        <div id="chat-modal-header">
+          <span>Public Chat</span>
+          <button id="close-modal">×</button>
+        </div>
+        <div id="genesys-chat-container" style="width: 100%; height: 300px;"></div>
+      </div>
+    </body>
+  </html>
+</g:ui_page>
+
+Client Script:
+
+document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('chat-bubble').addEventListener('click', function () {
+    document.getElementById('chat-modal').style.display = 'block';
+    loadGenesysChat();
+  });
+
+  document.getElementById('close-modal').addEventListener('click', function () {
+    document.getElementById('chat-modal').style.display = 'none';
+  });
+});
+
+function loadGenesysChat() {
+  (function (g, e, n, es, ys) {
+    g['_genesysJs'] = e;
+    g[e] = g[e] || function () {
+      (g[e].q = g[e].q || []).push(arguments)
+    };
+    g[e].t = 1 * new Date();
+    g[e].c = es;
+    Genesys("command", "Database.set", {
+      messaging: {
+        customAttributes: {
+          department: "IFP",
+          policy_type: "Individual",
+          device: "mobile",
+          From: "rosshartford@gmail.com",
+          remote: "rosshartford@gmail.com",
+          RemoteName: "Ross Hartford"
+        }
+      }
+    });
+
+    Genesys("command", "Database.set", { messaging: { customAttributes: { GUID: "00cc9714-0eeb-4df8-878f-ddec9c85aaee"}}});
+    Genesys("command", "Launcher.show",
+    {},
+    function() {
+        /*fulfilled callback*/
+    },
+    function() {
+        /*rejected callback*/
+    });
+    ys = document.createElement('script'); ys.async = 1; ys.src = n; ys.charset = 'utf-8'; document.head.appendChild(ys);
+  })(window, 'Genesys', 'https://apps.usw2.pure.cloud/genesys-bootstrap/genesys.min.js', {
+    environment: 'usw2',
+    deploymentId: '45ba3597-79fa-477d-9723-3100edce78bf'
+  });
+}
+
+
 
 Variable names and values (JSON string): {"requested_for":{},"additional_information":{},"location":{},"phone":{},"end_date_time":{},"user_impact":{},"issue_started":{},"approving_manager":{},"requested_by":{},"previous_ticket":{},"tech_info":{},"bulletin_recipients":{},"red_blue_container":{},"ccb":{},"start_date_time":{},"service_restoration_date_time":{},"summary":{},"bulletin_type":{},"formatter":{},"affected_users":{},"action_requested":{},"restoration_details":{}}
 
